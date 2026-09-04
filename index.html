@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HPanel Radio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0a09;
+      --text: #fff6ea;
+      --muted: #c3b09a;
+      --line: rgba(255, 186, 92, .22);
+      --gold: #ffb43a;
+      --gold2: #ffe08a;
+      --mint: #3ee39a;
+      --ink: #140f0a;
+      --shadow: 0 28px 70px rgba(0,0,0,.55);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Lalezar, Tahoma, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255,180,58,.18), transparent 32%),
+        radial-gradient(circle at 92% 18%, rgba(62,227,154,.10), transparent 28%),
+        linear-gradient(180deg, #120e0b, #070605);
+    }
+    .gold { color: var(--gold); }
+    .login-modal, .add-modal {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(8,6,4,.78); backdrop-filter: blur(16px);
+      opacity: 1; visibility: visible;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+    .login-modal.hidden, .add-modal.hidden {
+      opacity: 0; visibility: hidden; pointer-events: none;
+    }
+    .card-box {
+      width: min(520px, calc(100% - 32px));
+      padding: 30px 26px; border-radius: 28px;
+      border: 1px solid var(--line);
+      background: linear-gradient(165deg, rgba(255,180,58,.12), rgba(255,255,255,.03));
+      box-shadow: var(--shadow); text-align: center;
+    }
+    h1, h2 { margin: 0 0 8px; }
+    .sub { margin: 0 0 16px; color: var(--muted); font-size: 16px; }
+    .field { text-align: right; margin-bottom: 10px; }
+    .field label { display: block; margin-bottom: 6px; color: var(--gold); font-size: 15px; }
+    input, textarea {
+      width: 100%; padding: 13px 14px; border-radius: 14px;
+      border: 1px solid var(--line); background: rgba(0,0,0,.38);
+      color: var(--text); margin-bottom: 0; outline: none;
+      font-family: inherit; font-size: 16px;
+    }
+    .ltr { direction: ltr; text-align: left; unicode-bidi: isolate; }
+    .btn {
+      border: 0; cursor: pointer; border-radius: 16px; padding: 12px 14px;
+      font-family: inherit; font-size: 17px;
+      box-shadow: 0 6px 0 rgba(0,0,0,.35);
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,.35); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-gold { background: linear-gradient(180deg, #ffd27a, #ff9d1f); color: var(--ink); }
+    .btn-mint { background: linear-gradient(180deg, #6af3b8, #17c77a); color: #042016; }
+    .btn-rose { background: linear-gradient(180deg, #ff8a97, #e23b4d); color: #fff; }
+    .btn-ghost { background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
+    .spin {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(20,15,10,.25); border-top-color: var(--ink);
+      display: inline-block; flex: 0 0 16px;
+      animation: spin .7s linear infinite;
+    }
+    .spin.light { border-color: rgba(255,255,255,.25); border-top-color: #fff6ea; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .app {
+      width: min(900px, calc(100% - 30px));
+      margin: auto; padding: 36px 0 80px;
+      opacity: 0; transform: translateY(12px); pointer-events: none; transition: .35s ease;
+    }
+    .app.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .hero { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+    .brand { font-size: clamp(30px, 6vw, 48px); }
+    .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .panel { padding: 16px; border-radius: 22px; border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+    .song-item {
+      padding: 14px 16px; border-radius: 16px; margin-bottom: 10px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.04);
+    }
+    .song-item:hover { background: rgba(255,255,255,.08); }
+    .song-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .song-title { font-size: 20px; }
+    .song-url { margin-top: 8px; font-size: 13px; color: var(--muted); word-break: break-all; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .row .btn { flex: 1; min-width: 90px; }
+    .empty { color: var(--muted); text-align: center; padding: 24px 8px; }
+    .toast-box { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); width: min(420px, calc(100% - 28px)); z-index: 2000; }
+    .toast {
+      margin-top: 8px; padding: 12px 14px; border-radius: 14px;
+      border: 1px solid var(--line); background: rgba(18,14,10,.94);
+      animation: toastIn .25s ease;
+    }
+    .toast.out { animation: toastOut .28s ease forwards; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes toastOut { to { opacity: 0; transform: translateY(12px); } }
+    .ok { color: #9dffc9; } .err { color: #ffb0b7; } .info { color: #ffd27a; }
+    .foot { margin-top: 28px; text-align: center; color: #7a6b5a; font-size: 14px; }
+    .hint { color: var(--muted); font-size: 14px; margin: 0 0 12px; text-align: right; }
+  </style>
+</head>
+<body>
+  <div id="loginModal" class="login-modal">
+    <div class="card-box">
+      <h1>HPanel Radio</h1>
+      <p class="sub">توکن گیت‌هاب را وارد کن</p>
+      <input id="tokenInput" class="ltr" type="password" placeholder="github_pat_...">
+      <button id="loginBtn" class="btn btn-gold" style="width:100%;margin-top:12px" onclick="connectGitHub()">ورود</button>
+    </div>
+  </div>
+
+  <div id="addModal" class="add-modal hidden">
+    <div class="card-box">
+      <h2>افزودن آهنگ</h2>
+      <p class="sub">فایل MP3 را در همین ریپو آپلود کن یا لینک آماده را بچسبان</p>
+      <div class="field">
+        <label for="songTitle">عنوان</label>
+        <input id="songTitle" type="text" placeholder="نام آهنگ">
+      </div>
+      <div class="field">
+        <label for="songFile">فایل MP3 (اختیاری)</label>
+        <input id="songFile" class="ltr" type="file" accept=".mp3,audio/mpeg">
+      </div>
+      <div class="field">
+        <label for="songUrl">یا لینک MP3 آماده</label>
+        <input id="songUrl" class="ltr" type="url" placeholder="https://.../song.mp3">
+      </div>
+      <button id="saveSongBtn" class="btn btn-mint" style="width:100%;margin-top:8px" onclick="saveSong()">ذخیره</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeAddModal()">لغو</button>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <div class="hero">
+      <div>
+        <div class="brand">HPanel Radio</div>
+        <p class="sub" style="margin:6px 0 0">لینک‌های عمومی MP3 برای رادیوی بازی</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-mint" onclick="openAddModal()">افزودن آهنگ</button>
+        <button class="btn btn-ghost" onclick="refreshSongs()">تازه‌سازی</button>
+        <button class="btn btn-rose" onclick="logout()">خروج</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p class="hint">لینک را کپی کن و در رادیوی بازی بچسبان. فایل‌های آپلودشده در پوشه <span class="gold">songs</span> همین ریپو ذخیره می‌شوند. فهرست آهنگ‌ها در گیست ذخیره می‌شود.</p>
+      <div id="songList"></div>
+    </div>
+    <div class="foot">HPanel Radio</div>
+  </div>
+
+  <div class="toast-box" id="toasts"></div>
+
+<script>
+const CONFIG = {
+  owner: "YOUR_GITHUB_USERNAME",
+  repo: "YOUR_REPO_NAME",
+  branch: "main",
+  gistId: "YOUR_GIST_ID",
+  gistFile: "songs.json",
+  folder: "songs",
+  api: "https://api.github.com"
+};
+
+const TOKEN_KEY = "hpanel_radio_github_token";
+let githubToken = "";
+let songs = [];
+
+function publicFileUrl(filename) {
+  const userPages = CONFIG.repo.toLowerCase() === (CONFIG.owner.toLowerCase() + ".github.io");
+  if (userPages) return "https://" + CONFIG.owner + ".github.io/" + CONFIG.folder + "/" + encodeURIComponent(filename);
+  return "https://" + CONFIG.owner + ".github.io/" + CONFIG.repo + "/" + CONFIG.folder + "/" + encodeURIComponent(filename);
+}
+
+function toast(msg, type) {
+  const el = document.createElement("div");
+  el.className = "toast " + (type === "error" ? "err" : type === "success" ? "ok" : "info");
+  el.textContent = msg;
+  document.getElementById("toasts").appendChild(el);
+  setTimeout(() => {
+    el.classList.add("out");
+    setTimeout(() => el.remove(), 280);
+  }, 3200);
+}
+
+function esc(s) {
+  return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || "");
+      const comma = result.indexOf(",");
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(new Error("خواندن فایل ناموفق بود"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function cleanFilename(name) {
+  return String(name || "song.mp3")
+    .replace(/[/\\]/g, "-")
+    .replace(/[^A-Za-z0-9._-]/g, "_")
+    .replace(/_+/g, "_");
+}
+
+async function api(path, options) {
+  options = options || {};
+  const headers = Object.assign({
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+  }, options.headers || {});
+  if (githubToken) headers.Authorization = "Bearer " + githubToken;
+  return fetch(CONFIG.api + path, Object.assign({}, options, { headers }));
+}
+
+function saveToken(token) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+function loadToken() {
+  return localStorage.getItem(TOKEN_KEY) || "";
+}
+
+function clearToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+function showApp() {
+  document.getElementById("loginModal").classList.add("hidden");
+  document.getElementById("app").classList.add("visible");
+}
+
+function hideApp() {
+  document.getElementById("app").classList.remove("visible");
+  document.getElementById("loginModal").classList.remove("hidden");
+}
+
+function setLoginLoading(on) {
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = on;
+  btn.innerHTML = on ? 'ورود<span class="spin"></span>' : "ورود";
+}
+
+function setSaveLoading(on) {
+  const btn = document.getElementById("saveSongBtn");
+  btn.disabled = on;
+  btn.innerHTML = on ? 'در حال ذخیره<span class="spin light"></span>' : "ذخیره";
+}
+
+async function connectGitHub() {
+  const token = (document.getElementById("tokenInput").value || loadToken()).trim();
+  if (!token) return toast("توکن را وارد کن", "error");
+  if (CONFIG.owner.indexOf("YOUR_") === 0 || CONFIG.gistId.indexOf("YOUR_") === 0) {
+    return toast("اول CONFIG را در index.html ویرایش کن", "error");
+  }
+  setLoginLoading(true);
+  githubToken = token;
+  try {
+    const repo = await api("/repos/" + CONFIG.owner + "/" + CONFIG.repo);
+    if (!repo.ok) throw new Error("دسترسی به ریپو نشد (" + repo.status + ")");
+    const gist = await api("/gists/" + CONFIG.gistId);
+    if (!gist.ok) throw new Error("دسترسی به گیست نشد (" + gist.status + ")");
+    saveToken(token);
+    showApp();
+    toast("وارد شدی", "success");
+    await refreshSongs();
+  } catch (e) {
+    githubToken = "";
+    hideApp();
+    toast(e.message || "ورود ناموفق", "error");
+  } finally {
+    setLoginLoading(false);
+  }
+}
+
+function logout() {
+  clearToken();
+  githubToken = "";
+  songs = [];
+  document.getElementById("tokenInput").value = "";
+  hideApp();
+  toast("خارج شدی", "info");
+}
+
+async function loadSongsFromGist() {
+  const res = await api("/gists/" + CONFIG.gistId);
+  if (!res.ok) throw new Error("خواندن گیست ناموفق");
+  const data = await res.json();
+  const file = data.files && data.files[CONFIG.gistFile];
+  if (!file) return { songs: [] };
+  let text = file.content || "";
+  if (file.truncated && file.raw_url) text = await (await fetch(file.raw_url)).text();
+  const parsed = JSON.parse(text || '{"songs":[]}');
+  return Array.isArray(parsed.songs) ? parsed : { songs: [] };
+}
+
+async function saveSongsToGist(nextSongs) {
+  const body = JSON.stringify({ songs: nextSongs }, null, 2);
+  const res = await api("/gists/" + CONFIG.gistId, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ files: { [CONFIG.gistFile]: { content: body } } })
+  });
+  if (!res.ok) throw new Error("ذخیره گیست ناموفق");
+}
+
+function renderSongs() {
+  const box = document.getElementById("songList");
+  if (!songs.length) {
+    box.innerHTML = '<div class="empty">هنوز آهنگی نیست. روی افزودن آهنگ بزن.</div>';
+    return;
+  }
+  box.innerHTML = songs.map((song, i) =>
+    '<div class="song-item">' +
+      '<div class="song-top"><div class="song-title">' + esc(song.title || "بدون عنوان") + '</div></div>' +
+      '<div class="song-url ltr">' + esc(song.url) + '</div>' +
+      '<div class="row">' +
+        '<button class="btn btn-gold" onclick="copyUrl(' + i + ')">کپی لینک</button>' +
+        '<a class="btn btn-ghost" href="' + esc(song.url) + '" target="_blank" rel="noopener">باز کردن</a>' +
+        '<button class="btn btn-rose" onclick="deleteSong(' + i + ')">حذف</button>' +
+      '</div>' +
+    '</div>'
+  ).join("");
+}
+
+async function refreshSongs() {
+  if (!githubToken) return;
+  try {
+    const data = await loadSongsFromGist();
+    songs = data.songs || [];
+    renderSongs();
+  } catch (e) {
+    toast(e.message || "تازه‌سازی ناموفق", "error");
+  }
+}
+
+function openAddModal() {
+  document.getElementById("songTitle").value = "";
+  document.getElementById("songFile").value = "";
+  document.getElementById("songUrl").value = "";
+  setSaveLoading(false);
+  document.getElementById("addModal").classList.remove("hidden");
+}
+
+function closeAddModal() {
+  setSaveLoading(false);
+  document.getElementById("addModal").classList.add("hidden");
+}
+
+async function uploadToRepo(file) {
+  if (file.size > 20 * 1024 * 1024) throw new Error("حجم فایل باید کمتر از ۲۰ مگابایت باشد");
+  const filename = cleanFilename(file.name);
+  const path = CONFIG.folder + "/" + filename;
+  const content = await fileToBase64(file);
+  const put = await api("/repos/" + CONFIG.owner + "/" + CONFIG.repo + "/contents/" + encodeURIComponent(path).replace(/%2F/g, "/"), {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: "Add song " + filename,
+      content: content,
+      branch: CONFIG.branch
+    })
+  });
+  if (put.status === 422) {
+    throw new Error("فایلی با این نام از قبل هست. نام فایل را عوض کن");
+  }
+  if (!put.ok) throw new Error("آپلود به گیت‌هاب ناموفق بود (" + put.status + ")");
+  return publicFileUrl(filename);
+}
+
+async function saveSong() {
+  const title = document.getElementById("songTitle").value.trim();
+  const file = document.getElementById("songFile").files[0];
+  let url = document.getElementById("songUrl").value.trim();
+  if (!title) return toast("عنوان را بنویس", "error");
+  if (!file && !url) return toast("فایل را انتخاب کن یا لینک را بچسبان", "error");
+  setSaveLoading(true);
+  try {
+    if (file) url = await uploadToRepo(file);
+    if (!/^https?:\/\//i.test(url)) throw new Error("لینک باید با http شروع شود");
+    const next = songs.concat([{ title: title, url: url, added: new Date().toISOString() }]);
+    await saveSongsToGist(next);
+    songs = next;
+    renderSongs();
+    closeAddModal();
+    toast(file ? "آپلود شد. ممکن است یک تا دو دقیقه طول بکشد" : "ذخیره شد", "success");
+  } catch (e) {
+    setSaveLoading(false);
+    toast(e.message || "ذخیره ناموفق", "error");
+  }
+}
+
+function copyUrl(i) {
+  const url = songs[i] && songs[i].url;
+  if (!url) return;
+  navigator.clipboard.writeText(url).then(
+    () => toast("لینک کپی شد", "success"),
+    () => toast(url, "info")
+  );
+}
+
+async function deleteSong(i) {
+  const song = songs[i];
+  if (!song) return;
+  if (!confirm("«" + song.title + "» از فهرست حذف شود؟")) return;
+  try {
+    const next = songs.filter((_, idx) => idx !== i);
+    await saveSongsToGist(next);
+    songs = next;
+    renderSongs();
+    toast("از فهرست حذف شد", "success");
+  } catch (e) {
+    toast(e.message || "حذف ناموفق", "error");
+  }
+}
+
+document.getElementById("tokenInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") connectGitHub();
+});
+window.onload = function () {
+  const saved = loadToken();
+  if (saved) {
+    document.getElementById("tokenInput").value = saved;
+    connectGitHub();
+  }
+};
+</script>
+</body>
+</html>
