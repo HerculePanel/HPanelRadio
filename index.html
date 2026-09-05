@@ -47,6 +47,13 @@
       border: 1px solid var(--line);
       background: linear-gradient(165deg, rgba(255,180,58,.12), rgba(255,255,255,.03));
       box-shadow: var(--shadow); text-align: center;
+      transform: translateY(0);
+      transition: transform .35s ease, opacity .35s ease;
+    }
+    .login-modal.hidden .card-box,
+    .add-modal.hidden .card-box {
+      transform: translateY(12px);
+      opacity: 0;
     }
     h1, h2 { margin: 0 0 8px; }
     .sub { margin: 0 0 16px; color: var(--muted); font-size: 16px; }
@@ -57,19 +64,28 @@
       border: 1px solid var(--line); background: rgba(0,0,0,.38);
       color: var(--text); margin-bottom: 0; outline: none;
       font-family: inherit; font-size: 16px;
+      transition: border-color .25s ease, background .25s ease;
     }
+    input:focus, textarea:focus { border-color: rgba(255,180,58,.55); }
     .ltr { direction: ltr; text-align: left; unicode-bidi: isolate; }
     .btn {
       border: 0; cursor: pointer; border-radius: 16px; padding: 12px 14px;
       font-family: inherit; font-size: 17px;
       box-shadow: 0 6px 0 rgba(0,0,0,.35);
       display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease, filter .18s ease;
     }
     .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,.35); }
     .btn:disabled { opacity: .4; cursor: not-allowed; }
     .btn-gold { background: linear-gradient(180deg, #ffd27a, #ff9d1f); color: var(--ink); }
     .btn-mint { background: linear-gradient(180deg, #6af3b8, #17c77a); color: #042016; }
     .btn-rose { background: linear-gradient(180deg, #ff8a97, #e23b4d); color: #fff; }
+    .btn-home { background: linear-gradient(180deg, #8ab0ff, #4d7dff); color: #061018; text-decoration:none; }
+    .btn-refresh {
+      background: linear-gradient(180deg, #7dfff0, #19c4b8);
+      color: #04221f;
+      border: 1px solid rgba(125,255,240,.45);
+    }
     .btn-ghost { background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
     .file-hidden {
       position: absolute;
@@ -91,6 +107,7 @@
       color: var(--text);
       cursor: pointer;
       text-align: right;
+      transition: background .25s ease, border-color .25s ease;
     }
     .file-pick:hover { background: rgba(255,255,255,.06); }
     .file-name {
@@ -126,12 +143,25 @@
       overflow: hidden;
     }
     .bar > span {
+      position: relative;
       display: block;
       height: 100%;
       width: 0%;
-      background: linear-gradient(180deg, var(--gold2), var(--gold));
-      box-shadow: 0 0 12px rgba(255,180,58,.35);
+      border-radius: 999px;
+      background: linear-gradient(90deg, #c98a1f 0%, var(--gold) 72%, var(--gold2) 100%);
+      box-shadow: 0 0 10px rgba(255,180,58,.28);
       transition: width .25s ease;
+    }
+    .bar > span::after {
+      content: "";
+      position: absolute;
+      top: -3px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff6d8 0%, var(--gold2) 42%, rgba(255,180,58,.15) 70%, transparent 74%);
+      opacity: .9;
     }
     .hidden-block { display: none; }
     .spin {
@@ -151,7 +181,11 @@
     .hero { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
     .brand { font-size: clamp(30px, 6vw, 48px); }
     .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .panel { padding: 16px; border-radius: 22px; border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+    .panel {
+      padding: 16px; border-radius: 22px; border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      transition: border-color .25s ease, background .25s ease;
+    }
     .space-box {
       margin-bottom: 14px;
       padding: 12px 14px;
@@ -162,8 +196,9 @@
     .song-item {
       padding: 14px 16px; border-radius: 16px; margin-bottom: 10px;
       border: 1px solid var(--line); background: rgba(255,255,255,.04);
+      transition: background .25s ease, transform .25s ease, border-color .25s ease;
     }
-    .song-item:hover { background: rgba(255,255,255,.08); }
+    .song-item:hover { background: rgba(255,255,255,.08); transform: translateY(-2px); }
     .song-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
     .song-title { font-size: 20px; }
     .song-url { margin-top: 8px; font-size: 13px; color: var(--muted); word-break: break-all; }
@@ -234,8 +269,9 @@
       </div>
       <div class="hero-actions">
         <button class="btn btn-mint" onclick="openAddModal()">افزودن آهنگ</button>
-        <button class="btn btn-ghost" onclick="refreshSongs()">تازه‌سازی</button>
         <button class="btn btn-rose" onclick="logout()">خروج</button>
+        <a class="btn btn-home" href="https://herculepanel.github.io/">برگشت به صفحه نخست</a>
+        <button class="btn btn-refresh" onclick="refreshSongs()">تازه‌سازی</button>
       </div>
     </div>
 
@@ -250,7 +286,7 @@
       <p class="hint">لینک را کپی کن و در رادیوی بازی بچسبان. فایل‌های آپلودشده در پوشه <span class="gold">songs</span> همین ریپو ذخیره می‌شوند. فهرست آهنگ‌ها در گیست ذخیره می‌شود.</p>
       <div id="songList"></div>
     </div>
-    <div class="foot">© <span class="gold">H</span>ercule<span class="gold">P</span>anel</div>
+    <div class="foot">© 2026 · <span class="gold">H</span>ercule<span class="gold">P</span>anel</div>
   </div>
 
   <div class="toast-box" id="toasts"></div>
@@ -623,4 +659,4 @@ window.onload = function () {
 };
 </script>
 </body>
-  </html>
+</html>
