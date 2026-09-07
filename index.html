@@ -57,12 +57,13 @@
     }
     h1, h2 { margin: 0 0 8px; }
     .sub { margin: 0 0 16px; color: var(--muted); font-size: 16px; }
+    .sub a { color: var(--gold); }
     .field { text-align: right; margin-bottom: 10px; }
     .field label { display: block; margin-bottom: 6px; color: var(--gold); font-size: 15px; }
     input, textarea {
       width: 100%; padding: 13px 14px; border-radius: 14px;
       border: 1px solid var(--line); background: rgba(0,0,0,.38);
-      color: var(--text); margin-bottom: 0; outline: none;
+      color: var(--text); outline: none;
       font-family: inherit; font-size: 16px;
       transition: border-color .25s ease, background .25s ease;
     }
@@ -71,9 +72,9 @@
     .btn {
       border: 0; cursor: pointer; border-radius: 16px; padding: 12px 14px;
       font-family: inherit; font-size: 17px;
-      box-shadow: 0 6px 0 rgba(0,0,0,.35);
+      box-shadow: 0 6px 0 rgba(0,0,0,.55);
       display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease, filter .18s ease;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
     }
     .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,.35); }
     .btn:disabled { opacity: .4; cursor: not-allowed; }
@@ -87,81 +88,32 @@
       border: 1px solid rgba(125,255,240,.45);
     }
     .btn-ghost { background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
-    .file-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      overflow: hidden;
-    }
+    .file-hidden { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
     .file-pick {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 8px 8px 8px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.38);
-      color: var(--text);
-      cursor: pointer;
-      text-align: right;
-      transition: background .25s ease, border-color .25s ease;
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 8px 8px 8px 14px; border-radius: 14px;
+      border: 1px solid var(--line); background: rgba(0,0,0,.38);
+      color: var(--text); cursor: pointer; text-align: right;
     }
-    .file-pick:hover { background: rgba(255,255,255,.06); }
-    .file-name {
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      color: var(--muted);
-      font-size: 15px;
-    }
+    .file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 15px; }
     .file-name.has { color: var(--text); }
-    .file-pick .btn {
-      flex: 0 0 auto;
-      padding: 10px 14px;
-      font-size: 15px;
-      pointer-events: none;
-    }
+    .file-pick .btn { flex: 0 0 auto; padding: 10px 14px; font-size: 15px; pointer-events: none; }
     .bar-wrap { margin: 8px 0 4px; text-align: right; }
-    .bar-label {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
+    .bar-label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 14px; margin-bottom: 6px; }
     .bar {
-      height: 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.38);
-      overflow: hidden;
+      height: 12px; border-radius: 999px; border: 1px solid var(--line);
+      background: rgba(0,0,0,.38); overflow: hidden;
     }
     .bar > span {
-      position: relative;
-      display: block;
-      height: 100%;
-      width: 0%;
+      position: relative; display: block; height: 100%; width: 0%;
       border-radius: 999px;
       background: linear-gradient(90deg, #c98a1f 0%, var(--gold) 72%, var(--gold2) 100%);
-      box-shadow: 0 0 10px rgba(255,180,58,.28);
       transition: width .25s ease;
     }
     .bar > span::after {
       content: "";
-      position: absolute;
-      top: -3px;
-      right: -4px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
+      position: absolute; top: -3px; right: -4px; width: 18px; height: 18px; border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #fff6d8 0%, var(--gold2) 42%, rgba(255,180,58,.15) 70%, transparent 74%);
-      opacity: .9;
     }
     .hidden-block { display: none; }
     .spin {
@@ -180,23 +132,24 @@
     .app.visible { opacity: 1; transform: none; pointer-events: auto; }
     .hero { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
     .brand { font-size: clamp(30px, 6vw, 48px); }
+    .badge {
+      display: none; margin-top: 8px; padding: 5px 10px; border-radius: 999px;
+      background: rgba(62,227,154,.16); color: var(--mint); font-size: 14px;
+    }
+    .badge.on { display: inline-block; }
     .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .panel {
       padding: 16px; border-radius: 22px; border: 1px solid var(--line);
       background: rgba(255,255,255,.03);
-      transition: border-color .25s ease, background .25s ease;
     }
     .space-box {
-      margin-bottom: 14px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.22);
+      margin-bottom: 14px; padding: 12px 14px; border-radius: 16px;
+      border: 1px solid var(--line); background: rgba(0,0,0,.22);
     }
     .song-item {
       padding: 14px 16px; border-radius: 16px; margin-bottom: 10px;
       border: 1px solid var(--line); background: rgba(255,255,255,.04);
-      transition: background .25s ease, transform .25s ease, border-color .25s ease;
+      transition: background .25s ease, transform .25s ease;
     }
     .song-item:hover { background: rgba(255,255,255,.08); transform: translateY(-2px); }
     .song-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -223,9 +176,10 @@
   <div id="loginModal" class="login-modal">
     <div class="card-box">
       <h1><span class="gold">HP</span>anel <span class="gold">R</span>adio</h1>
-      <p class="sub">توکن گیت‌هاب را وارد کن</p>
+      <p class="sub">اگر از گاوصندوق وارد شده باشی، همین‌جا باز می‌شود</p>
       <input id="tokenInput" class="ltr" type="password" placeholder="github_pat_...">
       <button id="loginBtn" class="btn btn-gold" style="width:100%;margin-top:12px" onclick="connectGitHub()">ورود</button>
+      <a class="btn btn-ghost" style="width:100%;margin-top:8px" href="https://herculepanel.github.io/vault/">ورود از گاوصندوق</a>
     </div>
   </div>
 
@@ -246,10 +200,7 @@
         </label>
       </div>
       <div id="uploadBarWrap" class="bar-wrap hidden-block">
-        <div class="bar-label">
-          <span>آپلود</span>
-          <span id="uploadBarText">۰٪</span>
-        </div>
+        <div class="bar-label"><span>آپلود</span><span id="uploadBarText">۰٪</span></div>
         <div class="bar"><span id="uploadBarFill"></span></div>
       </div>
       <div class="field">
@@ -265,6 +216,7 @@
     <div class="hero">
       <div>
         <div class="brand"><span class="gold">HP</span>anel <span class="gold">R</span>adio</div>
+        <div id="verifyBadge" class="badge">تأیید شده</div>
         <p class="sub" style="margin:6px 0 0">لینک‌های عمومی MP3 برای رادیوی بازی</p>
       </div>
       <div class="hero-actions">
@@ -274,7 +226,6 @@
         <button class="btn btn-refresh" onclick="refreshSongs()">تازه‌سازی</button>
       </div>
     </div>
-
     <div class="panel">
       <div class="space-box">
         <div class="bar-label">
@@ -283,12 +234,11 @@
         </div>
         <div class="bar"><span id="repoBarFill"></span></div>
       </div>
-      <p class="hint">لینک را کپی کن و در رادیوی بازی بچسبان. فایل‌های آپلودشده در پوشه <span class="gold">songs</span> همین ریپو ذخیره می‌شوند. فهرست آهنگ‌ها در گیست ذخیره می‌شود.</p>
+      <p class="hint">لینک را کپی کن و در رادیوی بازی بچسبان. فایل‌ها در پوشه <span class="gold">songs</span> ذخیره می‌شوند.</p>
       <div id="songList"></div>
     </div>
     <div class="foot">© 2026 · <span class="gold">H</span>ercule<span class="gold">P</span>anel</div>
   </div>
-
   <div class="toast-box" id="toasts"></div>
 
 <script>
@@ -302,33 +252,25 @@ const CONFIG = {
   api: "https://api.github.com",
   repoLimitBytes: 1024 * 1024 * 1024
 };
+const TOKEN_KEY = "hpanel_radio_token";
 
-const TOKEN_KEY = "hpanel_radio_github_token";
 let githubToken = "";
 let songs = [];
 let repoUsedBytes = 0;
 
 function publicFileUrl(filename) {
-  const userPages = CONFIG.repo.toLowerCase() === (CONFIG.owner.toLowerCase() + ".github.io");
-  if (userPages) return "https://" + CONFIG.owner + ".github.io/" + CONFIG.folder + "/" + encodeURIComponent(filename);
   return "https://" + CONFIG.owner + ".github.io/" + CONFIG.repo + "/" + CONFIG.folder + "/" + encodeURIComponent(filename);
 }
-
 function toast(msg, type) {
   const el = document.createElement("div");
   el.className = "toast " + (type === "error" ? "err" : type === "success" ? "ok" : "info");
   el.textContent = msg;
   document.getElementById("toasts").appendChild(el);
-  setTimeout(() => {
-    el.classList.add("out");
-    setTimeout(() => el.remove(), 280);
-  }, 3200);
+  setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 280); }, 3200);
 }
-
 function esc(s) {
   return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 }
-
 function formatBytes(n) {
   const v = Number(n) || 0;
   if (v < 1024) return v + " B";
@@ -336,19 +278,15 @@ function formatBytes(n) {
   if (v < 1024 * 1024 * 1024) return (v / (1024 * 1024)).toFixed(2) + " MB";
   return (v / (1024 * 1024 * 1024)).toFixed(2) + " GB";
 }
-
 function setBar(fillId, textId, used, total, extraText) {
   const pct = total > 0 ? Math.max(0, Math.min(100, (used / total) * 100)) : 0;
   document.getElementById(fillId).style.width = pct.toFixed(1) + "%";
   document.getElementById(textId).textContent = extraText || (Math.round(pct) + "٪");
 }
-
 function fileToBase64(file, onProgress) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onprogress = (e) => {
-      if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total * 40);
-    };
+    reader.onprogress = (e) => { if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total * 40); };
     reader.onload = () => {
       const result = String(reader.result || "");
       const comma = result.indexOf(",");
@@ -358,14 +296,9 @@ function fileToBase64(file, onProgress) {
     reader.readAsDataURL(file);
   });
 }
-
 function cleanFilename(name) {
-  return String(name || "song.mp3")
-    .replace(/[/\\]/g, "-")
-    .replace(/[^A-Za-z0-9._-]/g, "_")
-    .replace(/_+/g, "_");
+  return String(name || "song.mp3").replace(/[/\\]/g, "-").replace(/[^A-Za-z0-9._-]/g, "_").replace(/_+/g, "_");
 }
-
 async function api(path, options) {
   options = options || {};
   const headers = Object.assign({
@@ -375,7 +308,6 @@ async function api(path, options) {
   if (githubToken) headers.Authorization = "Bearer " + githubToken;
   return fetch(CONFIG.api + path, Object.assign({}, options, { headers }));
 }
-
 function putWithProgress(path, body, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -392,46 +324,41 @@ function putWithProgress(path, body, onProgress) {
     xhr.send(JSON.stringify(body));
   });
 }
-
 function saveToken(token) {
   localStorage.setItem(TOKEN_KEY, token);
+  document.cookie = TOKEN_KEY + "=" + encodeURIComponent(token) + "; path=/; max-age=" + (30*24*60*60) + "; SameSite=Lax";
 }
-
 function loadToken() {
-  return localStorage.getItem(TOKEN_KEY) || "";
+  return localStorage.getItem(TOKEN_KEY) || localStorage.getItem("hpanel_radio_github_token") || "";
 }
-
 function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem("hpanel_radio_github_token");
+  document.cookie = TOKEN_KEY + "=; path=/; max-age=0; SameSite=Lax";
 }
-
 function showApp() {
   document.getElementById("loginModal").classList.add("hidden");
   document.getElementById("app").classList.add("visible");
+  document.getElementById("verifyBadge").classList.toggle("on", localStorage.getItem("hpanel_verified") === "1");
 }
-
 function hideApp() {
   document.getElementById("app").classList.remove("visible");
   document.getElementById("loginModal").classList.remove("hidden");
 }
-
 function setLoginLoading(on) {
   const btn = document.getElementById("loginBtn");
   btn.disabled = on;
   btn.innerHTML = on ? 'ورود<span class="spin"></span>' : "ورود";
 }
-
 function setSaveLoading(on) {
   const btn = document.getElementById("saveSongBtn");
   btn.disabled = on;
   btn.innerHTML = on ? 'در حال ذخیره<span class="spin light"></span>' : "ذخیره";
 }
-
 function showUploadBar(on) {
   document.getElementById("uploadBarWrap").classList.toggle("hidden-block", !on);
   if (!on) setBar("uploadBarFill", "uploadBarText", 0, 100, "۰٪");
 }
-
 function onFileChosen() {
   const file = document.getElementById("songFile").files[0];
   const label = document.getElementById("fileName");
@@ -443,20 +370,11 @@ function onFileChosen() {
     label.classList.remove("has");
   }
 }
-
 function renderRepoBar() {
   const used = repoUsedBytes;
   const total = CONFIG.repoLimitBytes;
-  const left = Math.max(0, total - used);
-  setBar(
-    "repoBarFill",
-    "repoBarText",
-    used,
-    total,
-    formatBytes(used) + " از " + formatBytes(total) + " · خالی " + formatBytes(left)
-  );
+  setBar("repoBarFill", "repoBarText", used, total, formatBytes(used) + " از " + formatBytes(total) + " · خالی " + formatBytes(Math.max(0, total - used)));
 }
-
 async function refreshRepoSize() {
   const res = await api("/repos/" + CONFIG.owner + "/" + CONFIG.repo);
   if (!res.ok) return;
@@ -464,13 +382,9 @@ async function refreshRepoSize() {
   repoUsedBytes = (Number(data.size) || 0) * 1024;
   renderRepoBar();
 }
-
 async function connectGitHub() {
   const token = (document.getElementById("tokenInput").value || loadToken()).trim();
-  if (!token) return toast("توکن را وارد کن", "error");
-  if (CONFIG.owner.indexOf("YOUR_") === 0 || CONFIG.gistId.indexOf("YOUR_") === 0) {
-    return toast("اول CONFIG را در index.html ویرایش کن", "error");
-  }
+  if (!token) return toast("توکن نیست. از گاوصندوق وارد شو", "error");
   setLoginLoading(true);
   githubToken = token;
   try {
@@ -490,16 +404,14 @@ async function connectGitHub() {
     setLoginLoading(false);
   }
 }
-
 function logout() {
   clearToken();
   githubToken = "";
   songs = [];
   document.getElementById("tokenInput").value = "";
   hideApp();
-  toast("خارج شدی", "info");
+  toast("از رادیو خارج شدی", "info");
 }
-
 async function loadSongsFromGist() {
   const res = await api("/gists/" + CONFIG.gistId);
   if (!res.ok) throw new Error("خواندن گیست ناموفق");
@@ -511,7 +423,6 @@ async function loadSongsFromGist() {
   const parsed = JSON.parse(text || '{"songs":[]}');
   return Array.isArray(parsed.songs) ? parsed : { songs: [] };
 }
-
 async function saveSongsToGist(nextSongs) {
   const body = JSON.stringify({ songs: nextSongs }, null, 2);
   const res = await api("/gists/" + CONFIG.gistId, {
@@ -521,7 +432,6 @@ async function saveSongsToGist(nextSongs) {
   });
   if (!res.ok) throw new Error("ذخیره گیست ناموفق");
 }
-
 function renderSongs() {
   const box = document.getElementById("songList");
   if (!songs.length) {
@@ -540,7 +450,6 @@ function renderSongs() {
     '</div>'
   ).join("");
 }
-
 async function refreshSongs() {
   if (!githubToken) return;
   try {
@@ -552,7 +461,6 @@ async function refreshSongs() {
     toast(e.message || "تازه‌سازی ناموفق", "error");
   }
 }
-
 function openAddModal() {
   document.getElementById("songTitle").value = "";
   document.getElementById("songFile").value = "";
@@ -562,13 +470,11 @@ function openAddModal() {
   setSaveLoading(false);
   document.getElementById("addModal").classList.remove("hidden");
 }
-
 function closeAddModal() {
   setSaveLoading(false);
   showUploadBar(false);
   document.getElementById("addModal").classList.add("hidden");
 }
-
 async function uploadToRepo(file) {
   if (file.size > 20 * 1024 * 1024) throw new Error("حجم فایل باید کمتر از ۲۰ مگابایت باشد");
   if (repoUsedBytes + file.size > CONFIG.repoLimitBytes) throw new Error("فضای ریپو کافی نیست");
@@ -579,7 +485,6 @@ async function uploadToRepo(file) {
   const content = await fileToBase64(file, (pct) => {
     setBar("uploadBarFill", "uploadBarText", pct, 100, Math.round(pct) + "٪");
   });
-  setBar("uploadBarFill", "uploadBarText", 40, 100, "۴۰٪");
   const put = await putWithProgress(
     "/repos/" + CONFIG.owner + "/" + CONFIG.repo + "/contents/" + encodeURIComponent(path).replace(/%2F/g, "/"),
     { message: "Add song " + filename, content: content, branch: CONFIG.branch },
@@ -590,7 +495,6 @@ async function uploadToRepo(file) {
   setBar("uploadBarFill", "uploadBarText", 100, 100, "۱۰۰٪");
   return publicFileUrl(filename);
 }
-
 async function saveSong() {
   const title = document.getElementById("songTitle").value.trim();
   const file = document.getElementById("songFile").files[0];
@@ -601,12 +505,7 @@ async function saveSong() {
   try {
     if (file) url = await uploadToRepo(file);
     if (!/^https?:\/\//i.test(url)) throw new Error("لینک باید با http شروع شود");
-    const next = songs.concat([{
-      title: title,
-      url: url,
-      size: file ? file.size : 0,
-      added: new Date().toISOString()
-    }]);
+    const next = songs.concat([{ title: title, url: url, size: file ? file.size : 0, added: new Date().toISOString() }]);
     await saveSongsToGist(next);
     songs = next;
     renderSongs();
@@ -620,16 +519,11 @@ async function saveSong() {
     toast(e.message || "ذخیره ناموفق", "error");
   }
 }
-
 function copyUrl(i) {
   const url = songs[i] && songs[i].url;
   if (!url) return;
-  navigator.clipboard.writeText(url).then(
-    () => toast("لینک کپی شد", "success"),
-    () => toast(url, "info")
-  );
+  navigator.clipboard.writeText(url).then(() => toast("لینک کپی شد", "success"), () => toast(url, "info"));
 }
-
 async function deleteSong(i) {
   const song = songs[i];
   if (!song) return;
@@ -645,7 +539,6 @@ async function deleteSong(i) {
     toast(e.message || "حذف ناموفق", "error");
   }
 }
-
 document.getElementById("tokenInput").addEventListener("keydown", e => {
   if (e.key === "Enter") connectGitHub();
 });
