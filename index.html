@@ -9,1908 +9,3313 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
 :root{
---bg:#0b0a09;
---text:#fff6ea;
---muted:#c3b09a;
---line:rgba(255,186,92,.22);
---gold:#ffb43a;
---mint:#3ee39a;
---ink:#140f0a
+  --bg:#0b0a09;
+  --panel:rgba(25,20,15,.72);
+  --panel2:rgba(38,29,20,.60);
+  --text:#fff6ea;
+  --muted:#c3b09a;
+  --line:rgba(255,186,92,.20);
+  --gold:#ffb43a;
+  --gold2:#ffd27b;
+  --mint:#3ee39a;
+  --rose:#ff667d;
+  --blue:#68a8ff;
+  --ink:#140f0a;
+  --shadow:0 24px 70px rgba(0,0,0,.45);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,180,58,.12),transparent 28%),
+    radial-gradient(circle at 85% 20%,rgba(62,227,154,.07),transparent 25%),
+    radial-gradient(circle at 50% 100%,rgba(104,168,255,.06),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:"Lalezar",sans-serif;
+}
 
 body{
-margin:0;
-min-height:100vh;
-font-family:Lalezar,Tahoma;
-color:var(--text);
-background:
-radial-gradient(circle at 12% 0%,rgba(255,180,58,.23),transparent 32%),
-radial-gradient(circle at 88% 30%,rgba(62,227,154,.11),transparent 30%),
-linear-gradient(180deg,#120e0b,#070605)
+  padding:22px;
 }
 
-.wrap{
-width:min(1000px,calc(100% - 30px));
-margin:auto;
-padding:35px 0 25px
+button,
+input{
+  font-family:inherit;
 }
 
-.head{
-display:flex;
-justify-content:space-between;
-gap:12px;
-align-items:center;
-flex-wrap:wrap
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.app{
+  width:min(100%,900px);
+  margin:auto;
+}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018)),
+    var(--panel);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.header{
+  padding:22px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
 }
 
 .brand{
-font-size:32px
+  font-size:30px;
+  line-height:1;
+  letter-spacing:.3px;
 }
 
-.gold{
-color:var(--gold)
+.brand .h,
+.brand .p,
+.footerBrand .h,
+.footerBrand .p{
+  color:var(--gold);
 }
 
-.badge{
-display:inline-block;
-padding:5px 10px;
-border-radius:999px;
-background:rgba(62,227,154,.15);
-color:var(--mint)
+.brand .rest{
+  color:var(--text);
 }
 
-.panel{
-margin-top:16px;
-padding:15px;
-border-radius:18px;
-border:1px solid var(--line);
-background:linear-gradient(
-145deg,
-rgba(255,255,255,.085),
-rgba(255,180,58,.045),
-rgba(255,255,255,.025)
-);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-box-shadow:
-inset 0 1px 0 rgba(255,255,255,.07),
-0 18px 45px rgba(0,0,0,.18)
+.headerActions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
 .btn{
-border:0;
-cursor:pointer;
-border-radius:15px;
-padding:9px 13px;
-font:15px Lalezar;
-margin:4px;
-box-shadow:0 5px 0 rgba(0,0,0,.3)
+  min-height:42px;
+  padding:9px 14px;
+  border-radius:14px;
+  color:var(--text);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.045);
+  transition:.18s ease;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
 }
 
-.mint{
-background:linear-gradient(180deg,#6af3b8,#17c77a);
-color:#042016
+.btn:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.08);
 }
 
-.goldbtn{
-background:linear-gradient(180deg,#ffd27a,#ff9d1f);
-color:var(--ink)
+.btn:active{
+  transform:translateY(0) scale(.98);
 }
 
-.rose{
-background:linear-gradient(180deg,#ff8a97,#e23b4d);
-color:#fff
+.btn i{
+  margin-left:5px;
 }
 
-.home{
-background:linear-gradient(180deg,#8ab0ff,#4d7dff);
-color:#061018;
-text-decoration:none
+.btn.gold{
+  color:var(--ink);
+  background:linear-gradient(145deg,var(--gold2),var(--gold));
+  border-color:transparent;
 }
 
-.ghost{
-background:rgba(255,255,255,.06);
-color:var(--text);
-border:1px solid var(--line);
-box-shadow:none
+.btn.mint{
+  color:#07150e;
+  background:linear-gradient(145deg,#73f1b5,var(--mint));
+  border-color:transparent;
 }
 
-input{
-width:100%;
-padding:10px;
-border-radius:13px;
-border:1px solid var(--line);
-background:rgba(255,255,255,.055);
-backdrop-filter:blur(10px);
-color:var(--text);
-font:14px Lalezar
+.btn.rose{
+  color:#21070c;
+  background:linear-gradient(145deg,#ff8a9a,var(--rose));
+  border-color:transparent;
 }
 
-input[type=file]{
-padding:8px;
-cursor:pointer
+.btn.blue{
+  color:#071120;
+  background:linear-gradient(145deg,#9bc4ff,var(--blue));
+  border-color:transparent;
 }
 
-input[type=file]::file-selector-button{
-border:1px solid rgba(255,186,92,.35);
-border-radius:10px;
-padding:7px 11px;
-margin-inline-end:9px;
-background:linear-gradient(180deg,#ffd27a,#ff9d1f);
-color:#140f0a;
-font:14px Lalezar;
-cursor:pointer
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.content{
+  padding:20px;
+}
+
+.section{
+  margin-bottom:18px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:rgba(255,255,255,.025);
+}
+
+.section:last-child{
+  margin-bottom:0;
+}
+
+.sectionTitle{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:20px;
+  margin-bottom:13px;
+}
+
+.sectionTitle i{
+  color:var(--gold);
+}
+
+.hint{
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:13px;
+  line-height:1.8;
+}
+
+.formGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
 }
 
 label{
-display:block;
-color:var(--gold);
-margin:8px 0 5px
+  color:var(--muted);
+  font-size:14px;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="number"],
+input[type="datetime-local"]{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px 13px;
+  outline:none;
+  background:rgba(0,0,0,.20);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+
+input:focus{
+  border-color:rgba(255,180,58,.55);
+  box-shadow:0 0 0 3px rgba(255,180,58,.07);
+}
+
+.fileBox{
+  position:relative;
+  min-height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border:1px dashed rgba(255,180,58,.38);
+  border-radius:18px;
+  padding:16px;
+  background:rgba(255,180,58,.035);
+  transition:.18s;
+}
+
+.fileBox:hover{
+  background:rgba(255,180,58,.07);
+}
+
+.fileBox input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+
+.fileText i{
+  font-size:28px;
+  color:var(--gold);
+}
+
+.fileText div{
+  margin-top:4px;
+}
+
+.fileName{
+  color:var(--gold2);
+  font-family:Arial,sans-serif;
+  font-size:12px;
+  word-break:break-all;
+  margin-top:4px;
+}
+
+.uploadRow{
+  margin-top:13px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.progressWrap{
+  display:none;
+  margin-top:13px;
+}
+
+.progress{
+  height:9px;
+  border-radius:99px;
+  overflow:hidden;
+  background:rgba(255,255,255,.06);
+}
+
+.progressBar{
+  width:0%;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  transition:width .25s;
+}
+
+.progressText{
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:12px;
+  margin-top:6px;
+}
+
+.search{
+  margin-bottom:14px;
+}
+
+.search input{
+  width:100%;
+}
+
+.songs{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
 .song{
-padding:12px;
-margin:8px 0;
-border-radius:16px;
-background:rgba(255,255,255,.045);
-backdrop-filter:blur(10px);
--webkit-backdrop-filter:blur(10px);
-border:1px solid var(--line)
+  border:1px solid var(--line);
+  border-radius:21px;
+  padding:15px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
 }
 
-.song-title{
-font-size:18px
+.songTop{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  justify-content:space-between;
 }
 
-.url{
-direction:ltr;
-text-align:left;
-word-break:break-all;
-color:var(--muted);
-margin-top:4px
+.songTitle{
+  min-width:0;
+  font-size:20px;
+  word-break:break-word;
 }
 
-audio{
-width:100%;
-margin-top:10px
+.songMeta{
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:11px;
+  margin-top:4px;
+  line-height:1.8;
 }
 
-.footer{
-margin-top:22px;
-padding:17px;
-border-radius:18px;
-border:1px solid var(--line);
-background:linear-gradient(
-145deg,
-rgba(255,255,255,.06),
-rgba(255,180,58,.035),
-rgba(255,255,255,.02)
-);
-backdrop-filter:blur(16px);
--webkit-backdrop-filter:blur(16px);
-box-shadow:
-inset 0 1px 0 rgba(255,255,255,.06),
-0 12px 35px rgba(0,0,0,.16);
-text-align:center;
-color:var(--muted)
+.formatBadge{
+  flex:none;
+  padding:5px 9px;
+  border-radius:10px;
+  font-size:11px;
+  color:var(--gold2);
+  border:1px solid rgba(255,180,58,.22);
+  background:rgba(255,180,58,.07);
 }
 
-.footer-title{
-font-size:23px;
-color:var(--text)
+.formatBadge.mp3{
+  color:#07150e;
+  background:var(--mint);
+  border-color:transparent;
 }
 
-.footer-title .gold{
-color:var(--gold)
+.formatBadge.converted{
+  color:#071120;
+  background:var(--blue);
+  border-color:transparent;
 }
 
-.footer-version{
-display:inline-block;
-margin-top:4px;
-padding:4px 10px;
-border-radius:999px;
-background:rgba(255,180,58,.10);
-color:var(--gold);
-font-size:13px
+.player{
+  margin-top:13px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:11px;
+  background:rgba(0,0,0,.20);
 }
 
-.footer-made{
-margin-top:8px
+.playerControls{
+  display:flex;
+  gap:8px;
+  align-items:center;
 }
 
-.footer-bottom{
-margin-top:3px;
-font-family:Tahoma,sans-serif;
-font-size:11px;
-opacity:.7;
-direction:ltr
+.playBtn{
+  width:42px;
+  height:42px;
+  flex:none;
+  border-radius:13px;
+  color:var(--ink);
+  background:linear-gradient(145deg,var(--gold2),var(--gold));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
 }
 
-.modal{
-position:fixed;
-inset:0;
-background:rgba(8,6,4,.62);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:100;
-animation:modalIn .55s cubic-bezier(.22,1,.36,1)
+.playerTime{
+  width:83px;
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:11px;
+  text-align:center;
+  direction:ltr;
 }
 
-.modal.closing{
-animation:modalOut .5s cubic-bezier(.55,0,.78,.18) forwards
+.seek{
+  flex:1;
+  appearance:none;
+  height:6px;
+  border-radius:99px;
+  background:rgba(255,255,255,.10);
+  outline:none;
+  cursor:pointer;
 }
 
-.modal.hidden{
-display:none
+.seek::-webkit-slider-thumb{
+  appearance:none;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--gold);
+  border:2px solid #fff0d2;
 }
 
-.modalbox{
-width:min(550px,calc(100% - 30px));
-padding:20px;
-border-radius:20px;
-border:1px solid var(--line);
-background:rgba(22,17,12,.72);
-backdrop-filter:blur(22px);
--webkit-backdrop-filter:blur(22px);
-box-shadow:
-0 28px 80px rgba(0,0,0,.55),
-inset 0 1px 0 rgba(255,255,255,.08);
-animation:boxIn .6s cubic-bezier(.22,1,.36,1)
+.seek::-moz-range-thumb{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--gold);
+  border:2px solid #fff0d2;
 }
 
-.modal.closing .modalbox{
-animation:boxOut .45s cubic-bezier(.55,0,.78,.18) forwards
+.volume{
+  width:70px;
+  appearance:none;
+  height:5px;
+  border-radius:99px;
+  background:rgba(255,255,255,.10);
+  outline:none;
 }
 
-@keyframes modalIn{
-from{opacity:0}
-to{opacity:1}
+.volume::-webkit-slider-thumb{
+  appearance:none;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--gold2);
 }
 
-@keyframes modalOut{
-from{opacity:1}
-to{opacity:0}
+.volume::-moz-range-thumb{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--gold2);
 }
 
-@keyframes boxIn{
-from{
-opacity:0;
-transform:translateY(18px) scale(.96)
-}
-to{
-opacity:1;
-transform:none
-}
+.playerBottom{
+  margin-top:9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
 }
 
-@keyframes boxOut{
-to{
-opacity:0;
-transform:translateY(16px) scale(.96)
-}
+.playerStatus{
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:10px;
 }
 
-.hidden{
-display:none!important
+.songActions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.songActions .btn{
+  min-height:38px;
+  padding:7px 11px;
+  font-size:13px;
+}
+
+.empty{
+  text-align:center;
+  padding:35px 15px;
+  color:var(--muted);
+}
+
+.empty i{
+  display:block;
+  font-size:42px;
+  margin-bottom:8px;
+  color:var(--gold);
 }
 
 .loading{
-text-align:center;
-color:var(--muted)
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
 }
 
-.bar{
-height:12px;
-border-radius:999px;
-background:#1b1711;
-overflow:hidden;
-margin-top:8px
+.spinner{
+  display:inline-block;
+  width:23px;
+  height:23px;
+  border:3px solid rgba(255,255,255,.12);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  vertical-align:middle;
+  margin-left:8px;
 }
 
-.fill{
-height:100%;
-width:0;
-background:linear-gradient(90deg,var(--gold),var(--mint));
-transition:width .3s ease
-}
-
-.status{
-margin-top:8px;
-min-height:24px;
-color:var(--muted);
-line-height:1.7
-}
-
-.toast{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translate(-50%,22px) scale(.96);
-padding:12px 18px;
-border-radius:14px;
-background:rgba(23,18,13,.68);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-border:1px solid var(--line);
-box-shadow:
-0 18px 45px rgba(0,0,0,.35),
-inset 0 1px 0 rgba(255,255,255,.08);
-opacity:0;
-animation:toastIn .55s cubic-bezier(.22,1,.36,1) forwards;
-z-index:300
-}
-
-.toast.hide{
-animation:toastOut .55s cubic-bezier(.55,0,.78,.18) forwards
-}
-
-@keyframes toastIn{
-to{
-opacity:1;
-transform:translate(-50%,0) scale(1)
-}
-}
-
-@keyframes toastOut{
-to{
-opacity:0;
-transform:translate(-50%,18px) scale(.94)
-}
-}
-
-.ok{color:#9dffc9}
-.err{color:#ffb0b7}
-
-.spin{
-display:inline-block;
-width:16px;
-height:16px;
-border:2px solid rgba(0,0,0,.25);
-border-top-color:#111;
-border-radius:50%;
-animation:s .7s linear infinite
-}
-
-@keyframes s{
-to{transform:rotate(360deg)}
-}
-
-button,a,input{
-transition:
-transform .5s cubic-bezier(.22,1,.36,1),
-opacity .5s ease,
-border-color .5s ease,
-box-shadow .5s ease,
-background .5s ease
-}
-
-button:not(:disabled):hover,
-a.btn:hover{
-transform:translateY(-3px)
-}
-
-button:disabled{
-opacity:.55;
-cursor:not-allowed
-}
-
-.busy{
-position:fixed;
-inset:auto 50% 18px auto;
-transform:translateX(50%);
-display:flex;
-align-items:center;
-gap:8px;
-padding:9px 14px;
-border:1px solid var(--line);
-border-radius:13px;
-background:rgba(20,15,10,.92);
-backdrop-filter:blur(10px);
-z-index:250;
-box-shadow:0 8px 30px #0008
-}
-
-.busy.hidden{
-display:none
-}
-
-.bi{
-display:inline-block;
-vertical-align:-.12em;
-margin-inline-end:6px
-}
-
-/* Custom Alert / Confirm */
-
-.custom-dialog{
-position:fixed;
-inset:0;
-background:rgba(8,6,4,.68);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:500;
-animation:dialogIn .35s cubic-bezier(.22,1,.36,1)
-}
-
-.custom-dialog.hidden{
-display:none
-}
-
-.custom-dialog.closing{
-animation:dialogOut .3s cubic-bezier(.55,0,.78,.18) forwards
-}
-
-.custom-dialog-box{
-width:min(500px,calc(100% - 30px));
-padding:21px;
-border-radius:20px;
-border:1px solid var(--line);
-background:rgba(22,17,12,.78);
-backdrop-filter:blur(22px);
--webkit-backdrop-filter:blur(22px);
-box-shadow:
-0 28px 80px rgba(0,0,0,.55),
-inset 0 1px 0 rgba(255,255,255,.08);
-animation:dialogBoxIn .4s cubic-bezier(.22,1,.36,1)
-}
-
-.custom-dialog.closing .custom-dialog-box{
-animation:dialogBoxOut .3s cubic-bezier(.55,0,.78,.18) forwards
-}
-
-.dialog-title{
-margin:0 0 8px;
-font-size:23px
-}
-
-.dialog-message{
-color:var(--muted);
-line-height:1.9;
-white-space:pre-wrap
-}
-
-.dialog-icon{
-font-size:25px;
-vertical-align:-.12em;
-margin-inline-end:7px
-}
-
-.dialog-actions{
-display:flex;
-gap:6px;
-flex-wrap:wrap;
-margin-top:17px
-}
-
-@keyframes dialogIn{
-from{opacity:0}
-to{opacity:1}
-}
-
-@keyframes dialogOut{
-from{opacity:1}
-to{opacity:0}
-}
-
-@keyframes dialogBoxIn{
-from{
-opacity:0;
-transform:translateY(18px) scale(.96)
-}
-to{
-opacity:1;
-transform:none
-}
-}
-
-@keyframes dialogBoxOut{
-to{
-opacity:0;
-transform:translateY(16px) scale(.96)
-}
-}
-
-@media(max-width:600px){
-
-.wrap{
-width:min(100% - 20px,1000px);
-padding-top:20px
-}
-
-.brand{
-font-size:27px
-}
-
-.head>div:last-child{
-width:100%
-}
-
-.head>div:last-child .btn{
-margin:3px 1px
+@keyframes spin{
+  to{transform:rotate(360deg)}
 }
 
 .footer{
-margin-bottom:10px
+  margin-top:18px;
+  padding:20px;
+  text-align:center;
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:12px;
+  line-height:2;
 }
 
+.footerBrand{
+  font-family:"Lalezar",sans-serif;
+  font-size:22px;
+  color:var(--text);
+}
+
+.footer .version{
+  color:var(--gold);
+}
+
+.footer .heart{
+  color:#ff667d;
+}
+
+.modalBack{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.70);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+.modal{
+  width:min(100%,520px);
+  border:1px solid var(--line);
+  border-radius:25px;
+  padding:21px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025)),
+    #17120e;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modalIcon{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  color:var(--ink);
+  background:linear-gradient(145deg,var(--gold2),var(--gold));
+  margin-bottom:12px;
+}
+
+.modalTitle{
+  font-size:23px;
+}
+
+.modalText{
+  margin-top:7px;
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:13px;
+  line-height:1.9;
+  white-space:pre-line;
+}
+
+.modalActions{
+  display:flex;
+  gap:9px;
+  justify-content:flex-end;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.toastBox{
+  position:fixed;
+  z-index:2000;
+  left:18px;
+  bottom:18px;
+  width:min(390px,calc(100% - 36px));
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  pointer-events:none;
+}
+
+.toast{
+  pointer-events:auto;
+  padding:12px 14px;
+  border-radius:15px;
+  border:1px solid var(--line);
+  background:rgba(20,15,10,.92);
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+  animation:toastIn .2s ease;
+  font-family:Arial,sans-serif;
+  font-size:13px;
+}
+
+.toast.ok{
+  border-color:rgba(62,227,154,.35);
+}
+
+.toast.err{
+  border-color:rgba(255,102,125,.35);
+}
+
+.toast.info{
+  border-color:rgba(104,168,255,.35);
+}
+
+@keyframes toastIn{
+  from{transform:translateY(10px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+.errorPanel{
+  text-align:center;
+  padding:30px 15px;
+}
+
+.errorPanel i{
+  color:var(--rose);
+  font-size:45px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+@media(max-width:650px){
+  body{
+    padding:10px;
+  }
+
+  .header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .headerActions{
+    width:100%;
+    justify-content:flex-start;
+  }
+
+  .formGrid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .playerControls{
+    flex-wrap:wrap;
+  }
+
+  .seek{
+    order:5;
+    flex-basis:100%;
+  }
+
+  .volume{
+    width:55px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="wrap">
+<div class="app">
 
-<div class="head">
+  <div class="card">
 
-<div>
-<div class="brand">
-<span class="gold">H</span>Panel <span class="gold">R</span>adio
-</div>
+    <header class="header">
 
-<span id="role" class="badge"></span>
-</div>
+      <div class="brand">
+        <span class="h">H</span><span class="p">P</span><span class="rest">anel Radio</span>
+      </div>
 
-<div>
+      <div class="headerActions">
+        <button class="btn" onclick="goHome()">
+          <i class="bi bi-house"></i>
+          منوی اصلی
+        </button>
 
-<button class="btn rose" onclick="logout()">
-<i class="bi bi-box-arrow-right"></i>
-خروج
-</button>
+        <button class="btn" onclick="refreshSongs()">
+          <i class="bi bi-arrow-clockwise"></i>
+          تازه‌سازی
+        </button>
 
-<a class="btn home" href="https://herculepanel.github.io/">
-<i class="bi bi-house"></i>
-منوی اصلی
-</a>
+        <button class="btn rose" onclick="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+          خروج
+        </button>
+      </div>
 
-<button class="btn ghost" onclick="refreshSongs()">
-<i class="bi bi-arrow-clockwise"></i>
-تازه‌سازی
-</button>
+    </header>
 
-</div>
+    <main class="content" id="appContent">
 
-</div>
+      <div class="loading" id="initialLoading">
+        <span class="spinner"></span>
+        در حال بررسی اطلاعات ورود...
+      </div>
 
+    </main>
 
-<div id="loading" class="panel loading">
-در حال بررسی اطلاعات ورود...
-<span class="spin"></span>
-</div>
+  </div>
 
+  <footer class="footer">
 
-<div id="busy" class="busy hidden">
-<span class="spin"></span>
-<span id="busyText">در حال انجام...</span>
-</div>
+    <div class="footerBrand">
+      <span class="h">H</span><span class="p">P</span>anel Radio
+    </div>
 
+    <div>
+      <span class="version">نسخه 1.4</span>
+    </div>
 
-<div id="app" style="display:none">
+    <div>
+      ساخته شده با <span class="heart">♥</span> برای اکوسیستم HPanel
+    </div>
 
-<div class="panel">
+    <div>
+      HerculePanel • Secure • Glassy • Lightweight
+    </div>
 
-<button class="btn mint" onclick="openAdd()">
-<i class="bi bi-plus-circle"></i>
-افزودن آهنگ
-</button>
-
-<div id="songs"></div>
-
-</div>
-
-</div>
-
-
-<footer class="footer">
-
-<div class="footer-title">
-<span class="gold">H</span>Panel <span class="gold">R</span>adio
-</div>
-
-<div class="footer-version">
-نسخه 1.3
-</div>
-
-<div class="footer-made">
-ساخته شده با <span class="gold">♥</span> برای اکوسیستم HPanel
-</div>
-
-<div class="footer-bottom">
-HerculePanel • Secure • Glassy • Lightweight
-</div>
-
-</footer>
+  </footer>
 
 </div>
 
 
-<!-- Add Song -->
+<!-- General modal -->
 
-<div id="modal" class="modal hidden">
+<div class="modalBack" id="modalBack">
 
-<div class="modalbox">
+  <div class="modal">
 
-<h2>
-<i class="bi bi-music-note-beamed"></i>
-افزودن آهنگ
-</h2>
+    <div class="modalIcon" id="modalIcon">
+      <i class="bi bi-info-lg"></i>
+    </div>
 
-<label>عنوان</label>
+    <div class="modalTitle" id="modalTitle">
+      پیام
+    </div>
 
-<input
-id="title"
-autocomplete="off"
-placeholder="مثلاً آهنگ من"
->
+    <div class="modalText" id="modalText"></div>
 
-<label>فایل صوتی</label>
+    <div class="modalActions" id="modalActions"></div>
 
-<input
-id="file"
-type="file"
-accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.webm"
->
-
-<div id="fileInfo" class="status">
-فایل‌های غیر MP3 توسط GitHub Actions به MP3 تبدیل می‌شوند.
-</div>
-
-<label>یا لینک MP3</label>
-
-<input
-id="url"
-type="url"
-placeholder="https://..."
->
-
-<div id="progress" class="bar">
-<div id="fill" class="fill"></div>
-</div>
-
-<div id="convertStatus" class="status"></div>
-
-<button
-id="saveBtn"
-class="btn mint"
-onclick="saveSong()"
->
-<i class="bi bi-check-lg"></i>
-ذخیره
-</button>
-
-<button
-class="btn ghost"
-onclick="closeAdd()"
->
-<i class="bi bi-x-lg"></i>
-لغو
-</button>
-
-</div>
+  </div>
 
 </div>
 
 
-<!-- Custom Dialog -->
-
-<div id="customDialog" class="custom-dialog hidden">
-
-<div class="custom-dialog-box">
-
-<h2 id="dialogTitle" class="dialog-title"></h2>
-
-<div id="dialogMessage" class="dialog-message"></div>
-
-<div id="dialogActions" class="dialog-actions"></div>
-
-</div>
-
-</div>
+<div class="toastBox" id="toastBox"></div>
 
 
 <script>
+"use strict";
 
-const C={
-owner:"HerculePanel",
-repo:"HPanelRadio",
-branch:"main",
-gist:"eb1b8cd10486738c06ed9cc12677b7e2",
-file:"songs.json",
-folder:"songs",
-workflow:"convert.yml"
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const C = {
+  owner: "HerculePanel",
+  repo: "HPanelRadio",
+  branch: "main",
+
+  gist: "eb1b8cd10486738c06ed9cc12677b7e2",
+
+  file: "songs.json",
+  folder: "songs",
+
+  workflow: "convert.yml",
+
+  vaultUrl: "https://herculepanel.github.io/vault/",
+  homeUrl: "https://herculepanel.github.io/"
 };
-
-const AUTH="hpanel_auth";
-const TK="hpanel_radio_token";
-const ITEMS_KEY="hpanel_vault_items";
-
-let token="";
-let admin=false;
-let songs=[];
 
 
 /* =========================================================
-   Auth
+   HPanel AUTH
+========================================================= */
+
+const AUTH_KEY = "hpanel_auth";
+const ITEMS_KEY = "hpanel_vault_items";
+const RADIO_TOKEN_KEY = "hpanel_radio_token";
+
+let token = "";
+let admin = false;
+let songs = [];
+let selectedFile = null;
+let modalResolve = null;
+
+
+/* =========================================================
+   AUTH
 ========================================================= */
 
 function getAuth(){
-
-try{
-return JSON.parse(
-localStorage.getItem(AUTH)||"null"
-);
-}catch{
-return null;
-}
-
+  try{
+    return JSON.parse(localStorage.getItem(AUTH_KEY) || "null");
+  }catch{
+    return null;
+  }
 }
 
 
 function recoverRadioToken(){
 
-let t=
-localStorage.getItem(TK)||"";
+  let t = localStorage.getItem(RADIO_TOKEN_KEY) || "";
 
-if(t)
-return t;
+  if(t){
+    return t;
+  }
 
-try{
+  try{
 
-const items=
-JSON.parse(
-localStorage.getItem(ITEMS_KEY)||"[]"
-);
+    const items = JSON.parse(
+      localStorage.getItem(ITEMS_KEY) || "[]"
+    );
 
-const x=items.find(x=>
-x &&
-x.token &&
-String(x.name||"")
-.toLowerCase()
-.includes("radio")
-);
+    const item = items.find(x =>
+      x &&
+      x.token &&
+      String(x.name || "")
+        .toLowerCase()
+        .includes("radio")
+    );
 
-if(x?.token){
+    if(item?.token){
 
-localStorage.setItem(
-TK,
-x.token
-);
+      localStorage.setItem(
+        RADIO_TOKEN_KEY,
+        item.token
+      );
 
-return x.token;
+      return item.token;
+    }
 
-}
+  }catch{}
 
-}catch{}
-
-return "";
-
+  return "";
 }
 
 
 /* =========================================================
-   UI helpers
+   UI
 ========================================================= */
 
-function busy(on,text="در حال انجام..."){
-
-document
-.getElementById("busyText")
-.textContent=text;
-
-document
-.getElementById("busy")
-.classList
-.toggle("hidden",!on);
-
+function $(id){
+  return document.getElementById(id);
 }
 
 
-function toast(t,c=""){
+function toast(message,type="info"){
 
-const x=document.createElement("div");
+  const box = $("toastBox");
 
-x.className="toast "+c;
-x.textContent=t;
+  const el = document.createElement("div");
 
-document.body.appendChild(x);
+  el.className = "toast " + type;
+  el.textContent = message;
 
-setTimeout(()=>{
+  box.appendChild(el);
 
-x.classList.add("hide");
+  setTimeout(()=>{
+    el.remove();
+  },3800);
+}
 
-setTimeout(()=>{
-x.remove();
-},550);
 
-},3000);
+function closeModal(value=null){
 
+  $("modalBack").style.display = "none";
+
+  if(modalResolve){
+
+    const resolve = modalResolve;
+
+    modalResolve = null;
+
+    resolve(value);
+  }
+}
+
+
+function openModal({
+  title="پیام",
+  text="",
+  icon="bi-info-lg",
+  buttons=[]
+}){
+
+  $("modalTitle").textContent = title;
+  $("modalText").textContent = text;
+
+  $("modalIcon").innerHTML =
+    `<i class="bi ${icon}"></i>`;
+
+  const actions = $("modalActions");
+
+  actions.innerHTML = "";
+
+  for(const b of buttons){
+
+    const btn = document.createElement("button");
+
+    btn.className = "btn " + (b.class || "");
+
+    btn.innerHTML = b.html || b.text || "باشه";
+
+    btn.onclick = ()=>{
+      closeModal(b.value);
+    };
+
+    actions.appendChild(btn);
+  }
+
+  $("modalBack").style.display = "flex";
+}
+
+
+function askModal(options){
+
+  return new Promise(resolve=>{
+
+    modalResolve = resolve;
+
+    openModal(options);
+
+  });
+}
+
+
+function alertModal(title,text,type="info"){
+
+  return askModal({
+
+    title,
+    text,
+
+    icon:
+      type === "error"
+        ? "bi-exclamation-triangle"
+        : type === "success"
+          ? "bi-check-circle"
+          : "bi-info-circle",
+
+    buttons:[
+      {
+        text:"باشه",
+        class:"gold",
+        value:true
+      }
+    ]
+
+  });
 }
 
 
 /* =========================================================
-   Dialog
+   GITHUB API
 ========================================================= */
 
-function closeCustomDialog(){
+function apiHeaders(){
 
-const d=
-document.getElementById("customDialog");
-
-if(d.classList.contains("hidden"))
-return;
-
-d.classList.add("closing");
-
-setTimeout(()=>{
-
-d.classList.add("hidden");
-d.classList.remove("closing");
-
-},300);
+  return {
+    "Authorization":"Bearer " + token,
+    "Accept":"application/vnd.github+json",
+    "X-GitHub-Api-Version":"2022-11-28"
+  };
 
 }
 
 
-function customAlert(
-message,
-title="پیام",
-type="info"
-){
+async function github(url,options={}){
 
-return new Promise(resolve=>{
+  const response = await fetch(
+    "https://api.github.com" + url,
+    {
+      ...options,
 
-const d=document.getElementById("customDialog");
-const t=document.getElementById("dialogTitle");
-const m=document.getElementById("dialogMessage");
-const a=document.getElementById("dialogActions");
+      headers:{
+        ...apiHeaders(),
+        ...(options.headers || {})
+      }
+    }
+  );
 
-const icons={
-info:"bi-info-circle",
-success:"bi-check-circle",
-error:"bi-exclamation-triangle",
-warning:"bi-exclamation-triangle"
-};
+  let data = null;
 
-const cls=
-type==="error"||type==="warning"
-?"rose"
-:"mint";
+  try{
+    data = await response.json();
+  }catch{}
 
-t.innerHTML=
-`<i class="bi ${icons[type]||icons.info} dialog-icon"></i>${esc(title)}`;
+  if(!response.ok){
 
-m.textContent=message;
+    const message =
+      data?.message ||
+      `GitHub error ${response.status}`;
 
-a.innerHTML=`
-<button class="btn ${cls}" id="dialogOK">
-<i class="bi bi-check-lg"></i>
-باشه
-</button>
-`;
+    throw new Error(message);
+  }
 
-d.classList.remove("hidden","closing");
-
-document.getElementById("dialogOK").onclick=()=>{
-
-closeCustomDialog();
-
-setTimeout(resolve,300);
-
-};
-
-});
-
-}
-
-
-function customConfirm(
-message,
-title="تأیید"
-){
-
-return new Promise(resolve=>{
-
-const d=document.getElementById("customDialog");
-const t=document.getElementById("dialogTitle");
-const m=document.getElementById("dialogMessage");
-const a=document.getElementById("dialogActions");
-
-t.innerHTML=
-`<i class="bi bi-question-circle dialog-icon"></i>${esc(title)}`;
-
-m.textContent=message;
-
-a.innerHTML=`
-
-<button class="btn mint" id="dialogYes">
-<i class="bi bi-check-lg"></i>
-بله
-</button>
-
-<button class="btn ghost" id="dialogNo">
-<i class="bi bi-x-lg"></i>
-خیر
-</button>
-
-`;
-
-d.classList.remove("hidden","closing");
-
-document.getElementById("dialogYes").onclick=()=>{
-
-closeCustomDialog();
-
-setTimeout(()=>resolve(true),300);
-
-};
-
-document.getElementById("dialogNo").onclick=()=>{
-
-closeCustomDialog();
-
-setTimeout(()=>resolve(false),300);
-
-};
-
-});
-
+  return data;
 }
 
 
 /* =========================================================
-   GitHub API
+   BASE64
 ========================================================= */
 
-function api(path,opt={}){
+function arrayBufferToBase64(buffer){
 
-return fetch(
-"https://api.github.com"+path,
-{
-...opt,
+  const bytes = new Uint8Array(buffer);
 
-headers:{
-"Accept":"application/vnd.github+json",
-"X-GitHub-Api-Version":"2022-11-28",
-"Authorization":"Bearer "+token,
-...(opt.headers||{})
-}
+  let binary = "";
 
-}
-);
+  const chunkSize = 0x8000;
 
-}
+  for(
+    let i=0;
+    i<bytes.length;
+    i+=chunkSize
+  ){
 
+    binary += String.fromCharCode(
+      ...bytes.subarray(
+        i,
+        Math.min(i+chunkSize,bytes.length)
+      )
+    );
 
-async function json(path,opt={}){
+  }
 
-const r=await api(path,opt);
-
-const d=
-await r.json().catch(()=>null);
-
-if(!r.ok)
-throw Error(
-d?.message||"GitHub API "+r.status
-);
-
-return d;
-
+  return btoa(binary);
 }
 
 
 /* =========================================================
-   Escape
+   PATH HELPERS
 ========================================================= */
 
-function esc(s){
+function cleanFileName(name){
 
-return String(s??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+  return String(name || "audio")
+    .replace(/[^\w.\-\u0600-\u06FF ]+/g,"_")
+    .replace(/\s+/g,"_")
+    .replace(/_+/g,"_")
+    .slice(0,100);
+}
 
+
+function uniqueFileName(name){
+
+  const dot = name.lastIndexOf(".");
+
+  const base =
+    dot > 0
+      ? name.slice(0,dot)
+      : name;
+
+  const ext =
+    dot > 0
+      ? name.slice(dot)
+      : "";
+
+  return (
+    cleanFileName(base) +
+    "_" +
+    Date.now() +
+    ext.toLowerCase()
+  );
+}
+
+
+function isMp3(file){
+
+  if(!file)return false;
+
+  const name = file.name.toLowerCase();
+
+  return (
+    name.endsWith(".mp3") ||
+    file.type === "audio/mpeg"
+  );
 }
 
 
 /* =========================================================
-   Songs
+   SONG DATA
 ========================================================= */
+
+function normalizeSongs(data){
+
+  if(Array.isArray(data)){
+    return data;
+  }
+
+  if(Array.isArray(data?.songs)){
+    return data.songs;
+  }
+
+  return [];
+}
+
 
 async function loadSongs(){
 
-busy(true,"در حال بارگذاری آهنگ‌ها...");
+  try{
 
-try{
+    const raw = await github(
+      `/gists/${C.gist}`
+    );
 
-const d=
-await json("/gists/"+C.gist);
+    const content =
+      raw?.files?.[C.file]?.content || "";
 
-const f=d.files?.[C.file];
+    if(!content.trim()){
 
-songs=f
-?JSON.parse(
-f.content||'{"songs":[]}'
-).songs||[]
-:[];
+      songs = [];
 
-render();
+      return;
+    }
 
-}finally{
+    const data = JSON.parse(content);
 
-busy(false);
+    songs = normalizeSongs(data);
 
+  }catch(error){
+
+    console.error(error);
+
+    throw new Error(
+      "خواندن اطلاعات آهنگ‌ها ناموفق بود: " +
+      error.message
+    );
+  }
 }
 
-}
 
+/* =========================================================
+   SAVE GIST
+========================================================= */
 
-function render(){
+async function saveSongs(){
 
-const box=
-document.getElementById("songs");
+  await github(
+    `/gists/${C.gist}`,
+    {
+      method:"PATCH",
 
-if(!songs.length){
+      headers:{
+        "Content-Type":"application/json"
+      },
 
-box.innerHTML=`
-<p>
-<i class="bi bi-music-note"></i>
-هنوز آهنگی نیست.
-</p>
-`;
+      body:JSON.stringify({
 
-return;
+        files:{
+          [C.file]:{
+            content:JSON.stringify(
+              {
+                songs:songs
+              },
+              null,
+              2
+            )
+          }
+        }
 
-}
-
-box.innerHTML=
-songs.map((s,i)=>`
-
-<div class="song">
-
-<div class="song-title">
-<b>
-<i class="bi bi-music-note-beamed"></i>
-${esc(s.title||"بدون عنوان")}
-</b>
-</div>
-
-<div class="url">
-${esc(s.url)}
-</div>
-
-<audio
-controls
-preload="none"
-src="${esc(s.url)}"
-></audio>
-
-<div>
-
-<button
-class="btn goldbtn"
-onclick="copy(${i})"
->
-<i class="bi bi-clipboard"></i>
-کپی لینک
-</button>
-
-<a
-class="btn ghost"
-href="${esc(s.url)}"
-target="_blank"
-rel="noopener"
->
-<i class="bi bi-box-arrow-up-right"></i>
-باز کردن
-</a>
-
-<button
-class="btn rose"
-onclick="del(${i})"
->
-<i class="bi bi-trash3"></i>
-حذف
-</button>
-
-</div>
-
-</div>
-
-`).join("");
+      })
+    }
+  );
 
 }
 
 
 /* =========================================================
-   Modal
+   REPO UPLOAD
 ========================================================= */
 
-function openAdd(){
+async function uploadToRepo(file,path){
 
-const m=
-document.getElementById("modal");
+  const buffer = await file.arrayBuffer();
 
-document.getElementById("title").value="";
-document.getElementById("file").value="";
-document.getElementById("url").value="";
-document.getElementById("fill").style.width="0%";
+  const base64 = arrayBufferToBase64(buffer);
 
-document.getElementById("convertStatus").textContent="";
+  const data = await github(
+    `/repos/${C.owner}/${C.repo}/contents/${encodeURIComponent(path)}`,
+    {
+      method:"PUT",
 
-document.getElementById("fileInfo").textContent=
-"فایل‌های غیر MP3 توسط GitHub Actions به MP3 تبدیل می‌شوند.";
+      headers:{
+        "Content-Type":"application/json"
+      },
 
-m.classList.remove(
-"hidden",
-"closing"
-);
+      body:JSON.stringify({
 
+        message:
+          "Upload audio: " +
+          file.name,
+
+        content:base64,
+
+        branch:C.branch
+
+      })
+    }
+  );
+
+  return data;
 }
 
 
-function closeAdd(){
+/* =========================================================
+   UPDATE UI
+========================================================= */
 
-const m=
-document.getElementById("modal");
+function renderApp(){
 
-if(m.classList.contains("hidden"))
-return;
+  $("appContent").innerHTML = `
 
-m.classList.add("closing");
+    <section class="section">
 
-setTimeout(()=>{
+      <div class="sectionTitle">
+        <i class="bi bi-cloud-arrow-up"></i>
+        افزودن آهنگ
+      </div>
 
-m.classList.add("hidden");
-m.classList.remove("closing");
+      <div class="hint">
+        فایل MP3 مستقیماً قابل استفاده در بازی است.
+        فایل‌های صوتی دیگر نیز قابل آپلود هستند و بعداً می‌توانید
+        آن‌ها را به MP3 تبدیل کنید.
+      </div>
 
-},500);
+      <div class="formGrid" style="margin-top:14px">
+
+        <div class="field full">
+
+          <label>
+            عنوان آهنگ
+          </label>
+
+          <input
+            id="songTitle"
+            type="text"
+            placeholder="مثلاً آهنگ شماره ۱"
+          >
+
+        </div>
+
+        <div class="field full">
+
+          <label>
+            فایل صوتی
+          </label>
+
+          <div class="fileBox">
+
+            <input
+              id="songFile"
+              type="file"
+              accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.opus"
+            >
+
+            <div class="fileText">
+
+              <i class="bi bi-music-note-beamed"></i>
+
+              <div>
+                انتخاب فایل صوتی
+              </div>
+
+              <div
+                class="fileName"
+                id="selectedFileName"
+              >
+                هنوز فایلی انتخاب نشده
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="uploadRow">
+
+        <button
+          class="btn gold"
+          id="uploadButton"
+          onclick="uploadSong()"
+        >
+          <i class="bi bi-cloud-upload"></i>
+          آپلود
+        </button>
+
+      </div>
+
+      <div
+        class="progressWrap"
+        id="uploadProgress"
+      >
+
+        <div class="progress">
+
+          <div
+            class="progressBar"
+            id="uploadProgressBar"
+          ></div>
+
+        </div>
+
+        <div
+          class="progressText"
+          id="uploadProgressText"
+        >
+          در حال آماده‌سازی...
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="section">
+
+      <div class="sectionTitle">
+        <i class="bi bi-music-note-list"></i>
+        آهنگ‌ها
+      </div>
+
+      <div class="search">
+
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="جستجوی آهنگ..."
+          oninput="renderSongs()"
+        >
+
+      </div>
+
+      <div
+        class="songs"
+        id="songsList"
+      ></div>
+
+    </section>
+
+  `;
+
+
+  $("songFile").addEventListener(
+    "change",
+    fileSelected
+  );
+
+  renderSongs();
+}
+
+
+function fileSelected(event){
+
+  selectedFile =
+    event.target.files?.[0] || null;
+
+  $("selectedFileName").textContent =
+    selectedFile
+      ? selectedFile.name
+      : "هنوز فایلی انتخاب نشده";
+}
+
+
+/* =========================================================
+   UPLOAD FLOW
+========================================================= */
+
+async function uploadSong(){
+
+  const title =
+    $("songTitle").value.trim();
+
+  const file = selectedFile;
+
+  if(!title){
+
+    await alertModal(
+      "عنوان وارد نشده",
+      "لطفاً عنوان آهنگ را وارد کنید."
+    );
+
+    return;
+  }
+
+  if(!file){
+
+    await alertModal(
+      "فایلی انتخاب نشده",
+      "لطفاً یک فایل صوتی انتخاب کنید."
+    );
+
+    return;
+  }
+
+
+  /*
+    GitHub Contents API has practical limits.
+    Keep this conservative for phone/browser uploads.
+  */
+
+  if(file.size > 30 * 1024 * 1024){
+
+    await alertModal(
+      "فایل خیلی بزرگ است",
+      "حداکثر حجم فایل برای آپلود در این نسخه ۳۰ مگابایت است.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const mp3 = isMp3(file);
+
+
+  /*
+    NON-MP3 CONFIRMATION
+  */
+
+  if(!mp3){
+
+    const answer = await askModal({
+
+      title:"این فایل MP3 نیست",
+
+      text:
+        "این فایل MP3 نیست.\n\n" +
+        "این فایل نمی‌تواند مستقیماً در بازی نوشته و استفاده شود. " +
+        "تبدیل فایل به MP3 در همین وب‌سایت امکان‌پذیر است.\n\n" +
+        "آیا می‌خواهید فایل اصلی را در مخزن آپلود کنید؟",
+
+      icon:"bi-exclamation-triangle",
+
+      buttons:[
+
+        {
+          text:"خیر، لغو",
+          class:"",
+          value:false
+        },
+
+        {
+          text:"بله، ادامه بده",
+          class:"gold",
+          value:true
+        }
+
+      ]
+
+    });
+
+    if(!answer){
+
+      return;
+    }
+
+  }
+
+
+  setUploadBusy(true);
+
+  try{
+
+    /*
+      Generate repository filename.
+    */
+
+    const repoName =
+      uniqueFileName(file.name);
+
+    const repoPath =
+      `${C.folder}/${repoName}`;
+
+
+    setProgress(
+      8,
+      "در حال آماده‌سازی فایل..."
+    );
+
+
+    /*
+      ACTUAL REPO UPLOAD
+    */
+
+    await uploadToRepo(
+      file,
+      repoPath
+    );
+
+
+    setProgress(
+      100,
+      "فایل با موفقیت در مخزن آپلود شد."
+    );
+
+
+    /*
+      Wait a moment so GitHub Pages/contents
+      can see the newly-created file.
+    */
+
+    await waitForRepoFile(
+      repoPath,
+      30000
+    );
+
+
+    const url =
+      `https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(repoName)}`;
+
+
+    /*
+      MP3:
+      immediately add to Gist.
+    */
+
+    if(mp3){
+
+      songs.unshift({
+
+        id:crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()),
+
+        title,
+
+        url,
+
+        size:file.size,
+
+        added:new Date().toISOString(),
+
+        format:"mp3",
+
+        repoPath
+
+      });
+
+      await saveSongs();
+
+      toast(
+        "آهنگ MP3 با موفقیت آپلود شد.",
+        "ok"
+      );
+
+    }
+
+
+    /*
+      NON-MP3:
+      It is already in the repo.
+      Now add its metadata to Gist.
+      It gets a conversion button.
+    */
+
+    else{
+
+      songs.unshift({
+
+        id:crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()),
+
+        title,
+
+        url,
+
+        size:file.size,
+
+        added:new Date().toISOString(),
+
+        format:"source",
+
+        repoPath,
+
+        converted:false,
+
+        convertedUrl:"",
+
+        convertedPath:""
+
+      });
+
+      await saveSongs();
+
+      toast(
+        "فایل آپلود شد. حالا می‌توانید آن را به MP3 تبدیل کنید.",
+        "ok"
+      );
+
+    }
+
+
+    $("songTitle").value = "";
+
+    $("songFile").value = "";
+
+    selectedFile = null;
+
+    $("selectedFileName").textContent =
+      "هنوز فایلی انتخاب نشده";
+
+    renderSongs();
+
+  }catch(error){
+
+    console.error(error);
+
+    await alertModal(
+      "خطا در آپلود",
+      error.message,
+      "error"
+    );
+
+  }finally{
+
+    setUploadBusy(false);
+
+  }
 
 }
 
 
 /* =========================================================
-   Filename
+   VERIFY REPO FILE
 ========================================================= */
 
-function safeBaseName(name){
-
-return String(name||"audio")
-.replace(/\.[^/.]+$/,"")
-.replace(/[\\/:*?"<>|]/g,"_")
-.replace(/\s+/g,"_")
-.trim()
-.slice(0,80)||"audio";
-
-}
-
-
-function isMP3(file){
-
-return file &&
-(
-file.type==="audio/mpeg" ||
-/\.mp3$/i.test(file.name)
-);
-
-}
-
-
-/* =========================================================
-   Upload
-========================================================= */
-
-async function uploadFile(file,path){
-
-const buffer=
-await file.arrayBuffer();
-
-const bytes=
-new Uint8Array(buffer);
-
-let binary="";
-
-const chunk=0x8000;
-
-for(
-let i=0;
-i<bytes.length;
-i+=chunk
+async function waitForRepoFile(
+  path,
+  timeout=30000
 ){
 
-binary+=String.fromCharCode(
-...bytes.subarray(
-i,
-Math.min(i+chunk,bytes.length)
-)
-);
+  const started = Date.now();
 
+  while(Date.now() - started < timeout){
+
+    try{
+
+      await github(
+        `/repos/${C.owner}/${C.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(C.branch)}`
+      );
+
+      return true;
+
+    }catch{}
+
+    await sleep(1500);
+  }
+
+  /*
+    The PUT itself already confirms the upload.
+    This is only a second verification.
+  */
+
+  return true;
 }
 
-const content=
-btoa(binary);
 
-return json(
-"/repos/"+C.owner+"/"+C.repo+
-"/contents/"+
-encodeURIComponent(path)
-.replace(/%2F/g,"/"),
-{
-method:"PUT",
+function sleep(ms){
 
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-message:
-"Upload audio for conversion",
-
-content,
-
-branch:C.branch
-
-})
-
-}
-);
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
 
 }
 
 
 /* =========================================================
-   Trigger GitHub Actions
+   CONVERSION
 ========================================================= */
 
-async function triggerConversion(source,output){
+async function convertSong(index){
 
-return json(
-"/repos/"+C.owner+"/"+C.repo+
-"/actions/workflows/"+
-encodeURIComponent(C.workflow)+
-"/dispatches",
-{
-method:"POST",
+  const song = songs[index];
 
-headers:{
-"Content-Type":"application/json"
-},
+  if(!song){
+    return;
+  }
 
-body:JSON.stringify({
+  if(song.format === "mp3"){
 
-ref:C.branch,
+    toast(
+      "این آهنگ از قبل MP3 است.",
+      "info"
+    );
 
-inputs:{
-source,
-output
+    return;
+  }
+
+  if(song.converted && song.convertedUrl){
+
+    toast(
+      "این آهنگ قبلاً تبدیل شده است.",
+      "info"
+    );
+
+    return;
+  }
+
+
+  const answer = await askModal({
+
+    title:"تبدیل به MP3",
+
+    text:
+      `آهنگ «${song.title}» به MP3 تبدیل می‌شود.\n\n` +
+      "تبدیل روی GitHub Actions انجام می‌شود و ممکن است کمی زمان ببرد.\n\n" +
+      "شروع تبدیل؟",
+
+    icon:"bi-arrow-repeat",
+
+    buttons:[
+
+      {
+        text:"لغو",
+        class:"",
+        value:false
+      },
+
+      {
+        text:"بله، تبدیل کن",
+        class:"mint",
+        value:true
+      }
+
+    ]
+
+  });
+
+
+  if(!answer){
+    return;
+  }
+
+
+  try{
+
+    song.converting = true;
+
+    renderSongs();
+
+
+    /*
+      Output filename
+    */
+
+    const sourceName =
+      song.repoPath.split("/").pop();
+
+    const dot =
+      sourceName.lastIndexOf(".");
+
+    const base =
+      dot > 0
+        ? sourceName.slice(0,dot)
+        : sourceName;
+
+    const outputName =
+      `${base}.mp3`;
+
+    const outputPath =
+      `${C.folder}/${outputName}`;
+
+
+    /*
+      Trigger GitHub Actions
+    */
+
+    await github(
+      `/repos/${C.owner}/${C.repo}/actions/workflows/${C.workflow}/dispatches`,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          ref:C.branch,
+
+          inputs:{
+            source:song.repoPath,
+            output:outputPath
+          }
+
+        })
+
+      }
+    );
+
+
+    toast(
+      "تبدیل شروع شد. منتظر پایان عملیات باشید...",
+      "info"
+    );
+
+
+    /*
+      Poll for converted MP3
+    */
+
+    const result =
+      await waitForConvertedFile(
+        outputPath,
+        8 * 60 * 1000
+      );
+
+
+    if(!result){
+
+      throw new Error(
+        "تبدیل در زمان تعیین‌شده تمام نشد. " +
+        "ممکن است GitHub Actions هنوز در حال اجرا باشد."
+      );
+
+    }
+
+
+    const mp3Url =
+      `https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(outputName)}`;
+
+
+    /*
+      Save converted information in Gist
+    */
+
+    song.converted = true;
+
+    song.convertedUrl = mp3Url;
+
+    song.convertedPath = outputPath;
+
+    song.convertedAt =
+      new Date().toISOString();
+
+
+    /*
+      The song now uses the MP3 URL.
+    */
+
+    await saveSongs();
+
+
+    toast(
+      "تبدیل به MP3 با موفقیت انجام شد.",
+      "ok"
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    await alertModal(
+      "خطا در تبدیل",
+      error.message,
+      "error"
+    );
+
+  }finally{
+
+    song.converting = false;
+
+    renderSongs();
+
+  }
+
 }
 
-})
 
-}
-);
-
-}
-
-
-/* =========================================================
-   Check converted file
-========================================================= */
-
-async function convertedFileExists(path){
-
-const r=
-await api(
-"/repos/"+C.owner+"/"+C.repo+
-"/contents/"+
-encodeURIComponent(path)
-.replace(/%2F/g,"/")+
-"?ref="+encodeURIComponent(C.branch)
-);
-
-if(r.status===200)
-return true;
-
-if(r.status===404)
-return false;
-
-const d=
-await r.json().catch(()=>null);
-
-throw Error(
-d?.message||
-"خطا در بررسی فایل خروجی"
-);
-
-}
-
-
-/* =========================================================
-   Wait for conversion
-========================================================= */
-
-async function waitForConversion(
-path,
-timeout=8*60*1000
+async function waitForConvertedFile(
+  path,
+  timeout
 ){
 
-const start=Date.now();
+  const started = Date.now();
 
-while(Date.now()-start<timeout){
+  while(Date.now() - started < timeout){
 
-if(
-await convertedFileExists(path)
-){
-return true;
+    try{
+
+      const data = await github(
+        `/repos/${C.owner}/${C.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(C.branch)}`
+      );
+
+      if(data?.download_url || data?.sha){
+
+        return true;
+      }
+
+    }catch{}
+
+    await sleep(5000);
+
+  }
+
+  return false;
 }
 
-await new Promise(
-resolve=>setTimeout(resolve,5000)
-);
+
+/* =========================================================
+   CUSTOM AUDIO PLAYER
+========================================================= */
+
+let activePlayer = null;
+
+
+function formatTime(seconds){
+
+  if(!Number.isFinite(seconds)){
+    return "00:00";
+  }
+
+  seconds = Math.max(
+    0,
+    Math.floor(seconds)
+  );
+
+  const min =
+    Math.floor(seconds / 60);
+
+  const sec =
+    seconds % 60;
+
+  return (
+    String(min).padStart(2,"0") +
+    ":" +
+    String(sec).padStart(2,"0")
+  );
+}
+
+
+function createPlayer(song,index){
+
+  const url =
+    song.converted && song.convertedUrl
+      ? song.convertedUrl
+      : song.url;
+
+  const id =
+    "player_" +
+    String(index) +
+    "_" +
+    Math.random()
+      .toString(36)
+      .slice(2,8);
+
+  return `
+
+    <div
+      class="player"
+      id="${id}"
+      data-url="${escapeHtml(url)}"
+    >
+
+      <audio
+        preload="metadata"
+        src="${escapeHtml(url)}"
+      ></audio>
+
+      <div class="playerControls">
+
+        <button
+          class="playBtn"
+          onclick="togglePlayer('${id}')"
+        >
+          <i class="bi bi-play-fill"></i>
+        </button>
+
+        <div class="playerTime">
+          <span class="current">00:00</span>
+          /
+          <span class="duration">00:00</span>
+        </div>
+
+        <input
+          class="seek"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+          step="0.1"
+          oninput="seekPlayer('${id}',this.value)"
+        >
+
+        <i class="bi bi-volume-up" style="color:var(--muted)"></i>
+
+        <input
+          class="volume"
+          type="range"
+          min="0"
+          max="1"
+          value="1"
+          step="0.01"
+          oninput="volumePlayer('${id}',this.value)"
+        >
+
+      </div>
+
+      <div class="playerBottom">
+
+        <div class="playerStatus">
+          پخش‌کننده HPanel
+        </div>
+
+        <button
+          class="btn"
+          style="min-height:32px;padding:5px 9px;font-size:11px"
+          onclick="restartPlayer('${id}')"
+        >
+          <i class="bi bi-arrow-counterclockwise"></i>
+          از اول
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  /*
+    Audio events are attached after rendering.
+  */
+}
+
+
+function getPlayer(id){
+
+  const box = document.getElementById(id);
+
+  if(!box)return null;
+
+  return {
+    box,
+    audio:box.querySelector("audio"),
+    play:box.querySelector(".playBtn i"),
+    current:box.querySelector(".current"),
+    duration:box.querySelector(".duration"),
+    seek:box.querySelector(".seek")
+  };
 
 }
 
-return false;
+
+function setupPlayers(){
+
+  document
+    .querySelectorAll(".player")
+    .forEach(box=>{
+
+      const p =
+        getPlayer(box.id);
+
+      if(!p)return;
+
+      p.audio.addEventListener(
+        "loadedmetadata",
+        ()=>{
+          p.duration.textContent =
+            formatTime(p.audio.duration);
+        }
+      );
+
+      p.audio.addEventListener(
+        "timeupdate",
+        ()=>{
+
+          p.current.textContent =
+            formatTime(p.audio.currentTime);
+
+          if(p.audio.duration){
+
+            p.seek.value =
+              (
+                p.audio.currentTime /
+                p.audio.duration
+              ) * 100;
+
+          }
+
+        }
+      );
+
+      p.audio.addEventListener(
+        "play",
+        ()=>{
+          p.play.className =
+            "bi bi-pause-fill";
+        }
+      );
+
+      p.audio.addEventListener(
+        "pause",
+        ()=>{
+          p.play.className =
+            "bi bi-play-fill";
+        }
+      );
+
+      p.audio.addEventListener(
+        "ended",
+        ()=>{
+          p.play.className =
+            "bi bi-play-fill";
+
+          p.seek.value = 0;
+        }
+      );
+
+      p.audio.addEventListener(
+        "error",
+        ()=>{
+          toast(
+            "پخش این فایل ممکن نیست.",
+            "err"
+          );
+        }
+      );
+
+    });
+
+}
+
+
+function togglePlayer(id){
+
+  const p = getPlayer(id);
+
+  if(!p)return;
+
+
+  /*
+    Stop another active player.
+  */
+
+  if(activePlayer && activePlayer !== p.audio){
+
+    try{
+      activePlayer.pause();
+    }catch{}
+
+  }
+
+
+  activePlayer = p.audio;
+
+
+  if(p.audio.paused){
+
+    p.audio.play().catch(()=>{
+      toast(
+        "مرورگر اجازه پخش خودکار را نداد.",
+        "err"
+      );
+    });
+
+  }else{
+
+    p.audio.pause();
+
+  }
+
+}
+
+
+function seekPlayer(id,value){
+
+  const p = getPlayer(id);
+
+  if(!p)return;
+
+  if(Number.isFinite(p.audio.duration)){
+
+    p.audio.currentTime =
+      p.audio.duration *
+      (Number(value) / 100);
+
+  }
+
+}
+
+
+function volumePlayer(id,value){
+
+  const p = getPlayer(id);
+
+  if(!p)return;
+
+  p.audio.volume =
+    Math.max(
+      0,
+      Math.min(1,Number(value))
+    );
+
+}
+
+
+function restartPlayer(id){
+
+  const p = getPlayer(id);
+
+  if(!p)return;
+
+  p.audio.currentTime = 0;
+
+  p.audio.play().catch(()=>{});
 
 }
 
 
 /* =========================================================
-   Save Song
+   SONG RENDERING
 ========================================================= */
 
-async function saveSong(){
+function renderSongs(){
 
-const title=
-document.getElementById("title")
-.value
-.trim();
+  const list = $("songsList");
 
-let file=
-document.getElementById("file")
-.files[0];
-
-let url=
-document.getElementById("url")
-.value
-.trim();
+  if(!list)return;
 
 
-if(!title){
-
-toast("عنوان را بنویس","err");
-return;
-
-}
+  const search =
+    ($("searchInput")?.value || "")
+      .trim()
+      .toLowerCase();
 
 
-if(!file&&!url){
+  let visible = songs.filter(song=>{
 
-toast(
-"فایل یا لینک را وارد کن",
-"err"
-);
+    if(!search)return true;
 
-return;
+    return String(song.title || "")
+      .toLowerCase()
+      .includes(search);
 
-}
+  });
 
 
-const saveBtn=
-document.getElementById("saveBtn");
+  if(!visible.length){
 
-saveBtn.disabled=true;
+    list.innerHTML = `
 
-busy(true,"در حال آماده‌سازی...");
+      <div class="empty">
 
-try{
+        <i class="bi bi-music-note"></i>
 
-/* =========================================
-   Direct MP3 URL
-========================================= */
+        ${
+          songs.length
+            ? "آهنگی با این جستجو پیدا نشد."
+            : "هنوز هیچ آهنگی اضافه نشده است."
+        }
 
-if(!file){
+      </div>
 
-if(!/^https?:\/\//i.test(url))
-throw Error("لینک نامعتبر است");
+    `;
 
-songs.push({
-title,
-url,
-size:0,
-added:new Date().toISOString()
-});
+    return;
+  }
 
-await updateGist();
 
-render();
+  list.innerHTML =
+    visible
+      .map(song=>{
 
-closeAdd();
+        const index =
+          songs.indexOf(song);
 
-toast(
-"آهنگ ذخیره شد",
-"ok"
-);
+        return renderSong(song,index);
 
-return;
+      })
+      .join("");
+
+
+  setupPlayers();
 
 }
 
 
-/* =========================================
-   File size
-========================================= */
+function renderSong(song,index){
 
-if(file.size>30*1024*1024){
+  const source =
+    song.format === "mp3"
+      ? "MP3"
+      : song.converted
+        ? "MP3 آماده"
+        : "غیر MP3";
 
-throw Error(
-"حجم فایل باید کمتر از ۳۰ مگابایت باشد"
-);
 
-}
+  const badgeClass =
+    song.format === "mp3"
+      ? "mp3"
+      : song.converted
+        ? "converted"
+        : "";
 
 
-/* =========================================
-   Generate unique names
-========================================= */
+  const playUrl =
+    song.converted && song.convertedUrl
+      ? song.convertedUrl
+      : song.format === "mp3"
+        ? song.url
+        : "";
 
-const id=
-Date.now()+"_"+Math.random()
-.toString(36)
-.slice(2,8);
 
-const base=
-safeBaseName(file.name);
+  let player = "";
 
-const source=
-C.folder+
-"/.convert_"+
-id+
-"_"+file.name
-.replace(/[\\/:*?"<>|]/g,"_");
+  if(playUrl){
 
-const output=
-C.folder+
-"/"+
-base+
-"_"+id+
-".mp3";
+    player =
+      createPlayer(
+        song,
+        index
+      );
 
+  }else{
 
-/* =========================================
-   MP3 = direct upload
-========================================= */
+    player = `
 
-if(isMP3(file)){
+      <div
+        class="player"
+        style="text-align:center;color:var(--muted)"
+      >
 
-document.getElementById("convertStatus")
-.textContent=
-"فایل MP3 است؛ بدون تبدیل آپلود می‌شود.";
+        <i
+          class="bi bi-volume-mute"
+          style="font-size:25px;color:var(--gold)"
+        ></i>
 
-document.getElementById("fill")
-.style.width="25%";
+        <div>
+          برای پخش، ابتدا فایل را به MP3 تبدیل کنید.
+        </div>
 
-await uploadFile(
-file,
-output
-);
+      </div>
 
-url=
-`https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(output.split("/").pop())}`;
+    `;
 
-document.getElementById("fill")
-.style.width="80%";
+  }
 
-}
 
+  let convertButton = "";
 
-/* =========================================
-   Non-MP3 = GitHub Actions
-========================================= */
 
-else{
+  if(
+    song.format !== "mp3" &&
+    !song.converted
+  ){
 
-document.getElementById("convertStatus")
-.textContent=
-"فایل غیر MP3 است؛ در حال ارسال به GitHub برای تبدیل...";
+    convertButton = `
 
-document.getElementById("fill")
-.style.width="15%";
+      <button
+        class="btn mint"
+        onclick="convertSong(${index})"
+        ${song.converting ? "disabled" : ""}
+      >
 
+        <i class="bi bi-arrow-repeat"></i>
 
-await uploadFile(
-file,
-source
-);
+        ${
+          song.converting
+            ? "در حال تبدیل..."
+            : "تبدیل به MP3"
+        }
 
+      </button>
 
-document.getElementById("fill")
-.style.width="30%";
+    `;
 
-document.getElementById("convertStatus")
-.textContent=
-"مبدل GitHub Actions شروع شد؛ لطفاً صبر کنید...";
+  }
 
 
-await triggerConversion(
-source,
-output
-);
+  return `
 
+    <article class="song">
 
-document.getElementById("fill")
-.style.width="40%";
+      <div class="songTop">
 
+        <div style="min-width:0">
 
-const success=
-await waitForConversion(output);
-
-
-if(!success){
-
-throw Error(
-"زمان تبدیل تمام شد. GitHub Actions هنوز فایل MP3 را آماده نکرده است."
-);
-
-}
-
-
-document.getElementById("fill")
-.style.width="85%";
-
-
-url=
-`https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(output.split("/").pop())}`;
-
-document.getElementById("convertStatus")
-.textContent=
-"تبدیل با موفقیت انجام شد.";
-
-}
-
-
-/* =========================================
-   Update Gist
-========================================= */
-
-songs.push({
-
-title,
-
-url,
-
-size:file.size,
-
-added:new Date().toISOString()
-
-});
-
-await updateGist();
-
-document.getElementById("fill")
-.style.width="100%";
-
-render();
-
-closeAdd();
-
-toast(
-"آهنگ با موفقیت ذخیره شد",
-"ok"
-);
-
-
-}catch(e){
-
-console.error(e);
-
-toast(
-e?.message||"خطایی رخ داد",
-"err"
-);
-
-}finally{
-
-busy(false);
-
-saveBtn.disabled=false;
-
-}
+          <div class="songTitle">
+            ${escapeHtml(song.title || "بدون عنوان")}
+          </div>
+
+          <div class="songMeta">
+
+            حجم:
+            ${formatBytes(song.size || 0)}
+
+            •
+
+            اضافه شده:
+            ${formatDate(song.added)}
+
+            ${
+              song.converted
+                ? " • تبدیل شده به MP3"
+                : ""
+            }
+
+          </div>
+
+        </div>
+
+        <div
+          class="formatBadge ${badgeClass}"
+        >
+          ${source}
+        </div>
+
+      </div>
+
+      ${player}
+
+      <div class="songActions">
+
+        ${convertButton}
+
+        <button
+          class="btn"
+          onclick="copySongUrl(${index})"
+        >
+          <i class="bi bi-link-45deg"></i>
+          کپی لینک
+        </button>
+
+        <button
+          class="btn"
+          onclick="openSong(${index})"
+        >
+          <i class="bi bi-box-arrow-up-right"></i>
+          باز کردن
+        </button>
+
+        <button
+          class="btn blue"
+          onclick="editSong(${index})"
+        >
+          <i class="bi bi-pencil-square"></i>
+          ویرایش
+        </button>
+
+        ${
+          admin
+            ? `
+              <button
+                class="btn rose"
+                onclick="deleteSong(${index})"
+              >
+                <i class="bi bi-trash3"></i>
+                حذف
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+
+    </article>
+
+  `;
 
 }
 
 
 /* =========================================================
-   Gist
+   EDIT GIST DATA
 ========================================================= */
 
-async function updateGist(){
+async function editSong(index){
 
-await json(
-"/gists/"+C.gist,
-{
-method:"PATCH",
+  const song = songs[index];
 
-headers:{
-"Content-Type":"application/json"
-},
+  if(!song)return;
 
-body:JSON.stringify({
 
-files:{
+  /*
+    Custom edit modal.
+  */
 
-[C.file]:{
+  $("modalTitle").textContent =
+    "ویرایش اطلاعات آهنگ";
 
-content:
-JSON.stringify(
-{songs},
-null,
-2
-)
+  $("modalIcon").innerHTML =
+    `<i class="bi bi-pencil-square"></i>`;
+
+  $("modalText").innerHTML = `
+
+    <div class="formGrid" style="margin-top:10px">
+
+      <div class="field full">
+
+        <label>
+          عنوان
+        </label>
+
+        <input
+          id="editTitle"
+          type="text"
+          value="${escapeAttr(song.title || "")}"
+        >
+
+      </div>
+
+      <div class="field full">
+
+        <label>
+          لینک فایل
+        </label>
+
+        <input
+          id="editUrl"
+          type="url"
+          value="${escapeAttr(song.url || "")}"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          حجم (بایت)
+        </label>
+
+        <input
+          id="editSize"
+          type="number"
+          min="0"
+          value="${Number(song.size || 0)}"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          تاریخ اضافه شدن
+        </label>
+
+        <input
+          id="editAdded"
+          type="datetime-local"
+          value="${toDateTimeLocal(song.added)}"
+        >
+
+      </div>
+
+      ${
+        song.converted
+          ? `
+            <div class="field full">
+
+              <label>
+                لینک MP3 تبدیل‌شده
+              </label>
+
+              <input
+                id="editConvertedUrl"
+                type="url"
+                value="${escapeAttr(song.convertedUrl || "")}"
+              >
+
+            </div>
+          `
+          : ""
+      }
+
+    </div>
+
+  `;
+
+  const actions =
+    $("modalActions");
+
+  actions.innerHTML = "";
+
+
+  const cancel =
+    document.createElement("button");
+
+  cancel.className = "btn";
+
+  cancel.textContent = "لغو";
+
+  cancel.onclick = ()=>{
+    closeModal(false);
+  };
+
+
+  const save =
+    document.createElement("button");
+
+  save.className = "btn gold";
+
+  save.innerHTML =
+    `<i class="bi bi-check2"></i> ذخیره تغییرات`;
+
+  save.onclick = async()=>{
+
+    save.disabled = true;
+
+    try{
+
+      const title =
+        $("editTitle").value.trim();
+
+      const url =
+        $("editUrl").value.trim();
+
+      const size =
+        Math.max(
+          0,
+          Number($("editSize").value || 0)
+        );
+
+      const added =
+        fromDateTimeLocal(
+          $("editAdded").value
+        );
+
+
+      if(!title){
+
+        toast(
+          "عنوان نمی‌تواند خالی باشد.",
+          "err"
+        );
+
+        save.disabled = false;
+
+        return;
+      }
+
+
+      if(!url){
+
+        toast(
+          "لینک فایل نمی‌تواند خالی باشد.",
+          "err"
+        );
+
+        save.disabled = false;
+
+        return;
+      }
+
+
+      song.title = title;
+
+      song.url = url;
+
+      song.size = size;
+
+      song.added = added;
+
+
+      if(
+        song.converted &&
+        $("editConvertedUrl")
+      ){
+
+        song.convertedUrl =
+          $("editConvertedUrl")
+            .value
+            .trim();
+
+      }
+
+
+      await saveSongs();
+
+
+      closeModal(true);
+
+      renderSongs();
+
+      toast(
+        "اطلاعات آهنگ در Gist ذخیره شد.",
+        "ok"
+      );
+
+    }catch(error){
+
+      console.error(error);
+
+      toast(
+        "ذخیره تغییرات ناموفق بود: " +
+        error.message,
+        "err"
+      );
+
+      save.disabled = false;
+
+    }
+
+  };
+
+
+  actions.appendChild(cancel);
+
+  actions.appendChild(save);
+
+
+  $("modalBack").style.display = "flex";
+
+
+  /*
+    This modal is custom HTML, not browser prompt().
+  */
 
 }
 
+
+function toDateTimeLocal(value){
+
+  if(!value)return "";
+
+  const d =
+    new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return "";
+  }
+
+  const pad =
+    n=>String(n).padStart(2,"0");
+
+  return (
+    d.getFullYear() +
+    "-" +
+    pad(d.getMonth()+1) +
+    "-" +
+    pad(d.getDate()) +
+    "T" +
+    pad(d.getHours()) +
+    ":" +
+    pad(d.getMinutes())
+  );
+
 }
 
-})
 
-}
-);
+function fromDateTimeLocal(value){
+
+  if(!value){
+    return new Date().toISOString();
+  }
+
+  const d =
+    new Date(value);
+
+  return Number.isNaN(d.getTime())
+    ? new Date().toISOString()
+    : d.toISOString();
 
 }
 
 
 /* =========================================================
-   Delete
+   DELETE
 ========================================================= */
 
-async function del(i){
+async function deleteSong(index){
 
-const yes=
-await customConfirm(
-"این آهنگ حذف شود؟",
-"حذف آهنگ"
-);
+  if(!admin){
 
-if(!yes)
-return;
+    await alertModal(
+      "دسترسی محدود",
+      "فقط مدیر می‌تواند آهنگ‌ها را حذف کند.",
+      "error"
+    );
 
-const oldSongs=[...songs];
+    return;
+  }
 
-songs.splice(i,1);
 
-busy(true,"در حال حذف آهنگ...");
+  const song = songs[index];
 
-try{
+  if(!song)return;
 
-await updateGist();
 
-render();
+  const answer = await askModal({
 
-toast(
-"حذف شد",
-"ok"
-);
+    title:"حذف آهنگ",
 
-}catch(e){
+    text:
+      `آیا مطمئن هستید که می‌خواهید «${song.title}» را از فهرست Gist حذف کنید؟\n\n` +
+      "توجه: این کار اطلاعات آهنگ را از Gist حذف می‌کند، " +
+      "اما فایل موجود در مخزن را حذف نمی‌کند.",
 
-songs=oldSongs;
+    icon:"bi-trash3",
 
-render();
+    buttons:[
 
-toast(
-e.message,
-"err"
-);
+      {
+        text:"لغو",
+        class:"",
+        value:false
+      },
 
-}finally{
+      {
+        text:"حذف",
+        class:"rose",
+        value:true
+      }
 
-busy(false);
+    ]
 
-}
+  });
+
+
+  if(!answer)return;
+
+
+  try{
+
+    songs.splice(index,1);
+
+    await saveSongs();
+
+    renderSongs();
+
+    toast(
+      "آهنگ از Gist حذف شد.",
+      "ok"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    await loadSongs();
+
+    renderSongs();
+
+    await alertModal(
+      "خطا",
+      error.message,
+      "error"
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   Copy
+   ACTIONS
 ========================================================= */
 
-function copy(i){
+async function copySongUrl(index){
 
-navigator.clipboard
-.writeText(songs[i].url)
-.then(()=>{
-toast(
-"لینک کپی شد",
-"ok"
-);
-})
-.catch(e=>{
-toast(
-e.message,
-"err"
-);
-});
+  const song = songs[index];
+
+  if(!song)return;
+
+
+  const url =
+    song.converted && song.convertedUrl
+      ? song.convertedUrl
+      : song.url;
+
+
+  try{
+
+    await navigator.clipboard.writeText(url);
+
+    toast(
+      "لینک کپی شد.",
+      "ok"
+    );
+
+  }catch{
+
+    await alertModal(
+      "کپی ناموفق بود",
+      url
+    );
+
+  }
 
 }
 
 
-/* =========================================================
-   Refresh
-========================================================= */
+function openSong(index){
+
+  const song = songs[index];
+
+  if(!song)return;
+
+
+  const url =
+    song.converted && song.convertedUrl
+      ? song.convertedUrl
+      : song.url;
+
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
 
 async function refreshSongs(){
 
-try{
+  try{
 
-await loadSongs();
+    toast(
+      "در حال تازه‌سازی...",
+      "info"
+    );
 
-toast(
-"فهرست تازه شد",
-"ok"
-);
+    await loadSongs();
 
-}catch(e){
+    renderSongs();
 
-toast(
-e.message,
-"err"
-);
+    toast(
+      "فهرست تازه شد.",
+      "ok"
+    );
 
-}
+  }catch(error){
+
+    await alertModal(
+      "خطا",
+      error.message,
+      "error"
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   Logout
+   LOGOUT
 ========================================================= */
 
 async function logout(){
 
-const yes=
-await customConfirm(
-"آیا می‌خواهید از HPanel Radio خارج شوید؟",
-"خروج از حساب"
-);
+  const answer = await askModal({
 
-if(!yes)
-return;
+    title:"خروج از HPanel Radio",
 
-localStorage.removeItem(AUTH);
-localStorage.removeItem(TK);
+    text:
+      "آیا مطمئن هستید که می‌خواهید از حساب HPanel خارج شوید؟",
 
-location.href=
-"https://herculepanel.github.io/";
+    icon:"bi-box-arrow-right",
+
+    buttons:[
+
+      {
+        text:"لغو",
+        class:"",
+        value:false
+      },
+
+      {
+        text:"بله، خروج",
+        class:"rose",
+        value:true
+      }
+
+    ]
+
+  });
+
+
+  if(!answer)return;
+
+
+  /*
+    Match HPanel Vault logout behavior.
+  */
+
+  localStorage.removeItem("hpanel_auth");
+  localStorage.removeItem("hpanel_vault_items");
+  localStorage.removeItem("hpanel_dashboard_token");
+  localStorage.removeItem("hpanel_radio_token");
+  localStorage.removeItem("hpanel_vault_token");
+
+
+  location.href =
+    C.vaultUrl;
+
+}
+
+
+function goHome(){
+
+  location.href =
+    C.homeUrl;
 
 }
 
 
 /* =========================================================
-   Missing token
+   HELPERS
+========================================================= */
+
+function setUploadBusy(busy){
+
+  const btn =
+    $("uploadButton");
+
+  if(btn){
+
+    btn.disabled = busy;
+
+    btn.innerHTML =
+      busy
+        ? `
+          <span class="spinner"
+            style="
+              width:16px;
+              height:16px;
+              border-width:2px;
+              margin-left:5px
+            ">
+          </span>
+          در حال آپلود...
+        `
+        : `
+          <i class="bi bi-cloud-upload"></i>
+          آپلود
+        `;
+
+  }
+
+  $("uploadProgress").style.display =
+    busy ? "block" : "none";
+
+}
+
+
+function setProgress(percent,text){
+
+  $("uploadProgressBar").style.width =
+    percent + "%";
+
+  $("uploadProgressText").textContent =
+    text;
+
+}
+
+
+function formatBytes(bytes){
+
+  if(!Number.isFinite(bytes) || bytes <= 0){
+    return "۰ بایت";
+  }
+
+  const units =
+    ["بایت","KB","MB","GB"];
+
+  let i=0;
+  let n=bytes;
+
+  while(n >= 1024 && i < units.length-1){
+
+    n/=1024;
+    i++;
+
+  }
+
+  return (
+    n.toFixed(i === 0 ? 0 : 1) +
+    " " +
+    units[i]
+  );
+
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "نامشخص";
+  }
+
+  const d =
+    new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return "نامشخص";
+  }
+
+  try{
+
+    return d.toLocaleDateString(
+      "fa-IR"
+    );
+
+  }catch{
+
+    return d.toLocaleDateString();
+
+  }
+
+}
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+
+}
+
+
+/* =========================================================
+   TOKEN ERROR
 ========================================================= */
 
 function showTokenError(){
 
-const loading=
-document.getElementById("loading");
+  $("appContent").innerHTML = `
 
-loading.innerHTML=`
+    <div class="section">
 
-<div style="font-size:20px;margin-bottom:8px">
-<i class="bi bi-exclamation-triangle"></i>
-توکن رادیو پیدا نشد
-</div>
+      <div class="errorPanel">
 
-<div style="color:var(--muted);line-height:1.8">
-اطلاعات ورود معتبر است، اما توکن HPanel Radio
-در حافظه مرورگر پیدا نشد.
-</div>
+        <i class="bi bi-key"></i>
 
-<a
-class="btn home"
-href="https://herculepanel.github.io/vault/"
->
-<i class="bi bi-safe2"></i>
-باز کردن Vault
-</a>
+        <h2>
+          توکن HPanel Radio پیدا نشد
+        </h2>
 
-`;
+        <p class="hint">
+          اطلاعات ورود معتبر است، اما توکن Radio در حافظه مرورگر پیدا نشد.
+          لطفاً از Vault دوباره وارد شوید یا توکن Radio را تنظیم کنید.
+        </p>
+
+        <button
+          class="btn gold"
+          onclick="location.href='${C.vaultUrl}'"
+        >
+          <i class="bi bi-shield-lock"></i>
+          رفتن به HPanel Vault
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
 
 }
 
 
 /* =========================================================
-   Startup
+   STARTUP
 ========================================================= */
 
-(async()=>{
+async function init(){
 
-const a=getAuth();
+  const a = getAuth();
 
-if(!a?.loggedIn){
 
-location.href=
-"https://herculepanel.github.io/vault/";
+  /*
+    EXACT HPanel AUTH FORMAT
+  */
 
-return;
+  if(!a?.loggedIn){
+
+    location.href =
+      C.vaultUrl;
+
+    return;
+  }
+
+
+  admin = !!a.admin;
+
+
+  /*
+    Recover token either from the dedicated
+    localStorage key or from hpanel_vault_items.
+  */
+
+  token =
+    recoverRadioToken();
+
+
+  /*
+    IMPORTANT:
+    Do NOT redirect here.
+    This prevents the redirect loop.
+  */
+
+  if(!token){
+
+    showTokenError();
+
+    return;
+  }
+
+
+  try{
+
+    await loadSongs();
+
+    renderApp();
+
+  }catch(error){
+
+    console.error(error);
+
+    $("appContent").innerHTML = `
+
+      <div class="section">
+
+        <div class="errorPanel">
+
+          <i class="bi bi-cloud-slash"></i>
+
+          <h2>
+            خطا در اتصال به GitHub
+          </h2>
+
+          <p class="hint">
+            ${escapeHtml(error.message)}
+          </p>
+
+          <button
+            class="btn gold"
+            onclick="location.reload()"
+          >
+            <i class="bi bi-arrow-clockwise"></i>
+            تلاش دوباره
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
 
 }
 
-admin=!!a.admin;
 
-token=recoverRadioToken();
-
-if(!token){
-
-showTokenError();
-
-return;
-
-}
-
-document.getElementById("role")
-.textContent=
-admin?"مدیر":"کاربر";
-
-try{
-
-await json(
-`/repos/${C.owner}/${C.repo}`
-);
-
-await loadSongs();
-
-document.getElementById("loading")
-.style.display="none";
-
-document.getElementById("app")
-.style.display="block";
-
-}catch(e){
-
-console.error(e);
-
-document.getElementById("loading")
-.innerHTML=`
-
-<div style="font-size:20px">
-<i class="bi bi-exclamation-triangle"></i>
-اتصال به GitHub ناموفق بود
-</div>
-
-<div style="color:var(--muted);margin-top:7px">
-${esc(e.message)}
-</div>
-
-<button
-class="btn mint"
-onclick="location.reload()"
->
-<i class="bi bi-arrow-clockwise"></i>
-تلاش دوباره
-</button>
-
-`;
-
-}
-
-})();
+init();
 
 </script>
 
