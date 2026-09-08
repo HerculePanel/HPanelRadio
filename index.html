@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HerculePanel Radio</title>
+<title>HPanel Radio</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -257,7 +257,8 @@ margin-top:8px
 .fill{
 height:100%;
 width:0;
-background:linear-gradient(90deg,var(--gold),var(--mint))
+background:linear-gradient(90deg,var(--gold),var(--mint));
+transition:width .35s ease
 }
 
 .toast{
@@ -356,7 +357,7 @@ vertical-align:-.12em;
 margin-inline-end:6px
 }
 
-/* Custom Alert / Confirm */
+/* ---------------- Custom Alert / Confirm ---------------- */
 
 .custom-dialog{
 position:fixed;
@@ -448,7 +449,81 @@ opacity:0;
 transform:translateY(16px) scale(.96)
 }
 }
+
+/* ---------------- Footer ---------------- */
+
+.footer{
+margin-top:18px;
+padding:13px 14px;
+border:1px solid var(--line);
+border-radius:17px;
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.06),
+rgba(255,180,58,.035),
+rgba(255,255,255,.02)
+);
+backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.06),
+0 12px 35px rgba(0,0,0,.18);
+text-align:center;
+color:var(--muted);
+font-size:11px;
+line-height:1.8
+}
+
+.footer-brand{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+flex-wrap:wrap;
+color:var(--text);
+font-size:13px
+}
+
+.footer-dot{
+width:4px;
+height:4px;
+border-radius:50%;
+background:var(--gold);
+display:inline-block
+}
+
+.footer-link{
+color:var(--gold);
+text-decoration:none
+}
+
+.footer-link:hover{
+text-decoration:underline
+}
+
+/* ---------------- Converter ---------------- */
+
+.converter-note{
+margin-top:8px;
+color:var(--muted);
+font-size:12px;
+line-height:1.8
+}
+
+.converter-status{
+margin-top:9px;
+color:var(--muted);
+min-height:24px
+}
+
+#progress{
+display:none
+}
 </style>
+
+<!-- FFmpeg WebAssembly is loaded only when a non-MP3 file needs conversion -->
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
 </head>
 
 <body>
@@ -459,12 +534,14 @@ transform:translateY(16px) scale(.96)
 
 <div>
 <div class="brand">
-<span class="gold">H</span>ercule<span class="gold">P</span>anel <span class="gold">R</span>adio
+<span class="gold">H</span>Panel <span class="gold">R</span>adio
 </div>
+
 <span id="role" class="badge"></span>
 </div>
 
 <div>
+
 <button class="btn rose" onclick="logout()">
 <i class="bi bi-box-arrow-right"></i>خروج
 </button>
@@ -476,6 +553,7 @@ transform:translateY(16px) scale(.96)
 <button class="btn ghost" onclick="refreshSongs()">
 <i class="bi bi-arrow-clockwise"></i>تازه‌سازی
 </button>
+
 </div>
 
 </div>
@@ -504,6 +582,42 @@ checking login data...
 
 </div>
 
+<!-- Footer -->
+
+<footer class="footer">
+
+<div class="footer-brand">
+<span>
+<span class="gold">H</span>Panel
+<span class="gold">R</span>adio
+</span>
+
+<span class="footer-dot"></span>
+
+<span>نسخه 1.3</span>
+</div>
+
+<div>
+ساخته شده با <span class="gold">♥</span> برای اکوسیستم HPanel
+</div>
+
+<div>
+
+<a
+class="footer-link"
+href="https://herculepanel.github.io/"
+>
+HerculePanel
+</a>
+
+<span class="footer-dot"></span>
+
+<span>Secure • Glassy • Lightweight</span>
+
+</div>
+
+</footer>
+
 </div>
 
 
@@ -521,11 +635,26 @@ checking login data...
 <label>عنوان</label>
 <input id="title">
 
-<label>فایل MP3</label>
-<input id="file" type="file" accept=".mp3,audio/mpeg">
+<label>فایل صوتی</label>
+
+<input
+id="file"
+type="file"
+accept="audio/*,.mp3,.wav,.ogg,.oga,.m4a,.aac,.flac,.webm"
+>
+
+<div class="converter-note">
+اگر فایل MP3 نباشد، قبل از آپلود به MP3 تبدیل می‌شود.
+</div>
+
+<div id="converterStatus" class="converter-status"></div>
 
 <label>یا لینک MP3</label>
-<input id="url" type="url" placeholder="https://...">
+<input
+id="url"
+type="url"
+placeholder="https://..."
+>
 
 <div id="progress" class="bar">
 <div id="fill" class="fill"></div>
@@ -578,6 +707,12 @@ let token="";
 let admin=false;
 let songs=[];
 
+/* FFmpeg */
+
+let ffmpeg=null;
+let ffmpegLoaded=false;
+let ffmpegLoading=null;
+
 
 function getAuth(){
 try{
@@ -596,8 +731,10 @@ document.getElementById("busy").classList.toggle("hidden",!on)
 
 function toast(t,c=""){
 const x=document.createElement("div");
+
 x.className="toast "+c;
 x.textContent=t;
+
 document.body.appendChild(x);
 
 setTimeout(()=>{
@@ -614,16 +751,21 @@ x.remove()
 /* ---------------- Custom Dialogs ---------------- */
 
 function closeCustomDialog(){
+
 const d=document.getElementById("customDialog");
 
-if(d.classList.contains("hidden"))return;
+if(d.classList.contains("hidden"))
+return;
 
 d.classList.add("closing");
 
 setTimeout(()=>{
+
 d.classList.add("hidden");
 d.classList.remove("closing");
+
 },300)
+
 }
 
 
@@ -869,9 +1011,9 @@ const m=document.getElementById("modal");
 
 m.classList.remove("hidden","closing");
 
-requestAnimationFrame(()=>{
-m.classList.add("show")
-})
+document.getElementById("converterStatus").textContent="";
+document.getElementById("fill").style.width="0%";
+document.getElementById("progress").style.display="none";
 
 }
 
@@ -880,13 +1022,16 @@ function closeAdd(){
 
 const m=document.getElementById("modal");
 
-if(m.classList.contains("hidden"))return;
+if(m.classList.contains("hidden"))
+return;
 
 m.classList.add("closing");
 
 setTimeout(()=>{
+
 m.classList.add("hidden");
 m.classList.remove("closing");
+
 },500)
 
 }
@@ -918,13 +1063,192 @@ r.readAsDataURL(file);
 }
 
 
+/* ---------------- Audio Conversion ---------------- */
+
+function isMP3(file){
+
+if(!file)
+return false;
+
+const name=file.name.toLowerCase();
+
+return (
+name.endsWith(".mp3") ||
+file.type==="audio/mpeg"
+);
+
+}
+
+
+function setConverterStatus(text,error=false){
+
+const el=document.getElementById("converterStatus");
+
+el.textContent=text;
+el.className="converter-status "+(error?"err":"");
+
+}
+
+
+async function loadFFmpeg(){
+
+if(ffmpegLoaded)
+return ffmpeg;
+
+if(ffmpegLoading)
+return ffmpegLoading;
+
+ffmpegLoading=(async()=>{
+
+if(!window.FFmpegWASM||!window.FFmpegWASM.FFmpeg){
+
+throw Error("مبدل MP3 بارگذاری نشد.");
+
+}
+
+ffmpeg=new FFmpegWASM.FFmpeg();
+
+ffmpeg.on("progress",({progress})=>{
+
+const p=Math.max(0,Math.min(100,Math.round(progress*100)));
+
+document.getElementById("fill").style.width=p+"%";
+
+setConverterStatus(
+"در حال تبدیل به MP3... "+p+"٪"
+);
+
+});
+
+ffmpeg.on("log",({message})=>{
+
+console.log("[FFmpeg]",message);
+
+});
+
+setConverterStatus("در حال آماده‌سازی مبدل MP3...");
+
+await ffmpeg.load({
+
+coreURL:
+"https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/ffmpeg-core.js",
+
+wasmURL:
+"https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/ffmpeg-core.wasm"
+
+});
+
+ffmpegLoaded=true;
+
+return ffmpeg;
+
+})();
+
+try{
+
+return await ffmpegLoading;
+
+}finally{
+
+ffmpegLoading=null;
+
+}
+
+}
+
+
+function safeFileName(name){
+
+return String(name||"audio")
+.replace(/\.[^/.]+$/,"")
+.replace(/[^\w\u0600-\u06FF -]/g,"_")
+.trim()
+.substring(0,80)||"audio";
+
+}
+
+
+async function convertToMP3(file){
+
+if(isMP3(file))
+return file;
+
+const engine=await loadFFmpeg();
+
+const inputName=
+"input_"+Date.now()+"."+(
+file.name.includes(".")
+?file.name.split(".").pop().toLowerCase()
+:"audio"
+);
+
+const outputName=
+safeFileName(file.name)+"_"+Date.now()+".mp3";
+
+setConverterStatus("در حال خواندن فایل صوتی...");
+
+const data=
+new Uint8Array(
+await file.arrayBuffer()
+);
+
+await engine.writeFile(inputName,data);
+
+document.getElementById("progress").style.display="block";
+document.getElementById("fill").style.width="0%";
+
+setConverterStatus("در حال تبدیل به MP3...");
+
+await engine.exec([
+"-i",
+inputName,
+"-vn",
+"-codec:a",
+"libmp3lame",
+"-b:a",
+"192k",
+"-ar",
+"44100",
+"-ac",
+"2",
+outputName
+]);
+
+const output=await engine.readFile(outputName);
+
+await engine.deleteFile(inputName).catch(()=>{});
+await engine.deleteFile(outputName).catch(()=>{});
+
+const blob=new Blob(
+[output.buffer],
+{type:"audio/mpeg"}
+);
+
+setConverterStatus("تبدیل به MP3 با موفقیت انجام شد.");
+
+return new File(
+[blob],
+outputName,
+{
+type:"audio/mpeg",
+lastModified:Date.now()
+}
+);
+
+}
+
+
+/* ---------------- Save Song ---------------- */
+
 async function saveSong(){
 
 const title=
 document.getElementById("title").value.trim();
 
-const file=
+const originalFile=
 document.getElementById("file").files[0];
+
+let file=originalFile;
 
 let url=
 document.getElementById("url").value.trim();
@@ -957,12 +1281,31 @@ if(file.size>20*1024*1024)
 throw Error("حجم فایل باید کمتر از ۲۰ مگابایت باشد");
 
 
+/*
+MP3 files go directly to GitHub.
+Every other audio format is converted to MP3 first.
+*/
+
+if(!isMP3(file)){
+
+setConverterStatus(
+"این فایل MP3 نیست؛ در حال تبدیل..."
+);
+
+file=await convertToMP3(file);
+
+}else{
+
+setConverterStatus("فایل از قبل MP3 است؛ تبدیل لازم نیست.");
+
+}
+
 const content=await b64(file);
 
 const path=C.folder+"/"+file.name;
 
+document.getElementById("progress").style.display="block";
 document.getElementById("fill").style.width="50%";
-
 
 await json(
 "/repos/"+C.owner+"/"+C.repo+
@@ -1000,6 +1343,7 @@ songs.push({
 title,
 url,
 size:file?.size||0,
+format:"mp3",
 added:new Date().toISOString()
 });
 
@@ -1038,7 +1382,9 @@ toast("آهنگ ذخیره شد","ok");
 
 }catch(e){
 
-toast(e.message,"err");
+console.error(e);
+
+toast(e.message||"خطایی رخ داد","err");
 
 }finally{
 
@@ -1058,7 +1404,8 @@ const yes=await customConfirm(
 "حذف آهنگ"
 );
 
-if(!yes)return;
+if(!yes)
+return;
 
 
 songs.splice(i,1);
@@ -1144,7 +1491,15 @@ toast(e.message,"err");
 
 /* ---------------- Logout ---------------- */
 
-function logout(){
+async function logout(){
+
+const yes=await customConfirm(
+"آیا می‌خواهید از HPanel خارج شوید؟",
+"خروج از حساب"
+);
+
+if(!yes)
+return;
 
 localStorage.removeItem(AUTH);
 localStorage.removeItem(TK);
