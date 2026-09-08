@@ -12,612 +12,855 @@
 
 <style>
 :root{
---bg:#0b0a09;
---text:#fff6ea;
---muted:#c3b09a;
---line:rgba(255,186,92,.22);
---gold:#ffb43a;
---mint:#3ee39a;
---ink:#140f0a
+  --bg:#0b0a09;
+  --text:#fff6ea;
+  --muted:#c3b09a;
+  --line:rgba(255,186,92,.22);
+  --gold:#ffb43a;
+  --mint:#3ee39a;
+  --rose:#ff7180;
+  --blue:#78a7ff;
+  --ink:#140f0a;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
 
 body{
-margin:0;
-min-height:100vh;
-font-family:Lalezar,Tahoma;
-color:var(--text);
-background:
-radial-gradient(circle at 12% 0%,rgba(255,180,58,.23),transparent 32%),
-radial-gradient(circle at 88% 30%,rgba(62,227,154,.11),transparent 30%),
-linear-gradient(180deg,#120e0b,#070605)
+  margin:0;
+  min-height:100vh;
+  font-family:Lalezar,Tahoma;
+  color:var(--text);
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(255,180,58,.23),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 30%,
+      rgba(62,227,154,.11),
+      transparent 30%
+    ),
+    linear-gradient(180deg,#120e0b,#070605);
 }
 
-.wrap{
-width:min(1000px,calc(100% - 30px));
-margin:auto;
-padding:35px 0 70px
-}
-
-.head{
-display:flex;
-justify-content:space-between;
-gap:12px;
-align-items:center;
-flex-wrap:wrap
-}
-
-.brand{font-size:32px}
-.gold{color:var(--gold)}
-
-.badge{
-display:inline-block;
-padding:5px 10px;
-border-radius:999px;
-background:rgba(62,227,154,.15);
-color:var(--mint)
-}
-
-.panel{
-margin-top:16px;
-padding:15px;
-border-radius:18px;
-border:1px solid var(--line);
-background:linear-gradient(
-145deg,
-rgba(255,255,255,.085),
-rgba(255,180,58,.045),
-rgba(255,255,255,.025)
-);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-box-shadow:
-inset 0 1px 0 rgba(255,255,255,.07),
-0 18px 45px rgba(0,0,0,.18)
-}
-
-.btn{
-border:0;
-cursor:pointer;
-border-radius:15px;
-padding:9px 13px;
-font:15px Lalezar;
-margin:4px;
-box-shadow:0 5px 0 rgba(0,0,0,.3)
-}
-
-.mint{
-background:linear-gradient(180deg,#6af3b8,#17c77a);
-color:#042016
-}
-
-.goldbtn{
-background:linear-gradient(180deg,#ffd27a,#ff9d1f);
-color:var(--ink)
-}
-
-.rose{
-background:linear-gradient(180deg,#ff8a97,#e23b4d);
-color:#fff
-}
-
-.home{
-background:linear-gradient(180deg,#8ab0ff,#4d7dff);
-color:#061018;
-text-decoration:none
-}
-
-.ghost{
-background:rgba(255,255,255,.06);
-color:var(--text);
-border:1px solid var(--line);
-box-shadow:none
-}
-
+button,
+a,
 input{
-width:100%;
-padding:10px;
-border-radius:13px;
-border:1px solid var(--line);
-background:rgba(255,255,255,.055);
-backdrop-filter:blur(10px);
-color:var(--text);
-font:14px Lalezar
-}
-
-input[type=file]{
-padding:8px;
-cursor:pointer
-}
-
-input[type=file]::file-selector-button{
-border:1px solid rgba(255,186,92,.35);
-border-radius:10px;
-padding:7px 11px;
-margin-inline-end:9px;
-background:linear-gradient(180deg,#ffd27a,#ff9d1f);
-color:#140f0a;
-font:14px Lalezar;
-cursor:pointer;
-transition:all .5s cubic-bezier(.22,1,.36,1)
-}
-
-input[type=file]::file-selector-button:hover{
-transform:translateY(-2px);
-box-shadow:0 7px 20px rgba(255,180,58,.22)
-}
-
-label{
-display:block;
-color:var(--gold);
-margin:8px 0 5px
-}
-
-.song{
-padding:14px;
-margin:10px 0;
-border-radius:16px;
-background:rgba(255,255,255,.045);
-backdrop-filter:blur(10px);
--webkit-backdrop-filter:blur(10px);
-border:1px solid var(--line)
-}
-
-.song-title{
-font-size:20px;
-margin-bottom:4px
-}
-
-.song-info{
-display:flex;
-gap:8px;
-align-items:center;
-flex-wrap:wrap;
-margin:7px 0
-}
-
-.format{
-display:inline-block;
-padding:3px 9px;
-border-radius:999px;
-font-size:12px;
-background:rgba(255,180,58,.13);
-color:var(--gold)
-}
-
-.format.mp3{
-background:rgba(62,227,154,.13);
-color:var(--mint)
-}
-
-.url{
-direction:ltr;
-text-align:left;
-word-break:break-all;
-color:var(--muted);
-font-family:monospace;
-font-size:12px;
-margin:8px 0
-}
-
-/* Custom audio player */
-
-.player{
-width:100%;
-padding:10px;
-border-radius:15px;
-border:1px solid var(--line);
-background:
-linear-gradient(
-145deg,
-rgba(255,255,255,.07),
-rgba(255,180,58,.035)
-);
-margin:10px 0
-}
-
-.player-top{
-display:flex;
-align-items:center;
-gap:10px
-}
-
-.play-btn{
-width:46px;
-height:46px;
-border-radius:14px;
-border:1px solid rgba(255,186,92,.28);
-background:linear-gradient(180deg,#ffd27a,#ff9d1f);
-color:#140f0a;
-font-size:20px;
-cursor:pointer;
-box-shadow:0 5px 0 rgba(0,0,0,.25);
-flex-shrink:0
-}
-
-.player-main{
-flex:1;
-min-width:0
-}
-
-.player-name{
-font-size:15px;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap
-}
-
-.player-time{
-color:var(--muted);
-font-size:12px;
-direction:ltr;
-text-align:left;
-margin-top:2px
-}
-
-.seek{
-width:100%;
-height:8px;
-margin-top:8px;
-appearance:none;
--webkit-appearance:none;
-border-radius:999px;
-background:#211a12;
-outline:none;
-padding:0;
-border:0
-}
-
-.seek::-webkit-slider-thumb{
-appearance:none;
--webkit-appearance:none;
-width:16px;
-height:16px;
-border-radius:50%;
-background:var(--gold);
-cursor:pointer;
-box-shadow:0 0 0 3px rgba(255,180,58,.15)
-}
-
-.seek::-moz-range-thumb{
-width:16px;
-height:16px;
-border-radius:50%;
-border:0;
-background:var(--gold);
-cursor:pointer
-}
-
-.volume{
-width:90px;
-height:7px;
-appearance:none;
--webkit-appearance:none;
-border-radius:999px;
-background:#211a12;
-padding:0;
-border:0
-}
-
-.volume::-webkit-slider-thumb{
-appearance:none;
--webkit-appearance:none;
-width:13px;
-height:13px;
-border-radius:50%;
-background:var(--mint);
-cursor:pointer
-}
-
-.volume::-moz-range-thumb{
-width:13px;
-height:13px;
-border-radius:50%;
-border:0;
-background:var(--mint);
-cursor:pointer
-}
-
-.player-bottom{
-display:flex;
-align-items:center;
-gap:9px;
-margin-top:8px;
-flex-wrap:wrap
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(8,6,4,.62);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:10;
-opacity:1;
-animation:modalIn .55s cubic-bezier(.22,1,.36,1)
-}
-
-.modal.closing{
-animation:modalOut .5s cubic-bezier(.55,0,.78,.18) forwards
-}
-
-.modal.hidden{display:none}
-
-.modalbox{
-width:min(550px,calc(100% - 30px));
-padding:20px;
-border-radius:20px;
-border:1px solid var(--line);
-background:rgba(22,17,12,.72);
-backdrop-filter:blur(22px);
--webkit-backdrop-filter:blur(22px);
-box-shadow:
-0 28px 80px rgba(0,0,0,.55),
-inset 0 1px 0 rgba(255,255,255,.08);
-animation:boxIn .6s cubic-bezier(.22,1,.36,1)
-}
-
-.modal.closing .modalbox{
-animation:boxOut .45s cubic-bezier(.55,0,.78,.18) forwards
-}
-
-@keyframes modalIn{
-from{opacity:0}
-to{opacity:1}
-}
-
-@keyframes modalOut{
-from{opacity:1}
-to{opacity:0}
-}
-
-@keyframes boxIn{
-from{
-opacity:0;
-transform:translateY(18px) scale(.96)
-}
-to{
-opacity:1;
-transform:none
-}
-}
-
-@keyframes boxOut{
-to{
-opacity:0;
-transform:translateY(16px) scale(.96)
-}
-}
-
-.hidden{
-display:none!important
-}
-
-.loading{
-text-align:center;
-color:var(--muted)
-}
-
-.bar{
-height:12px;
-border-radius:999px;
-background:#1b1711;
-overflow:hidden;
-margin-top:8px
-}
-
-.fill{
-height:100%;
-width:0;
-background:linear-gradient(90deg,var(--gold),var(--mint));
-transition:width .25s ease
-}
-
-.toast{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translate(-50%,22px) scale(.96);
-padding:12px 18px;
-border-radius:14px;
-background:rgba(23,18,13,.68);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-border:1px solid var(--line);
-box-shadow:
-0 18px 45px rgba(0,0,0,.35),
-inset 0 1px 0 rgba(255,255,255,.08);
-opacity:0;
-animation:toastIn .55s cubic-bezier(.22,1,.36,1) forwards;
-z-index:200
-}
-
-.toast.hide{
-animation:toastOut .55s cubic-bezier(.55,0,.78,.18) forwards
-}
-
-@keyframes toastIn{
-to{
-opacity:1;
-transform:translate(-50%,0) scale(1)
-}
-}
-
-@keyframes toastOut{
-to{
-opacity:0;
-transform:translate(-50%,18px) scale(.94)
-}
-}
-
-.ok{color:#9dffc9}
-.err{color:#ffb0b7}
-
-.spin{
-display:inline-block;
-width:16px;
-height:16px;
-border:2px solid rgba(0,0,0,.25);
-border-top-color:#111;
-border-radius:50%;
-animation:s .7s linear infinite
-}
-
-@keyframes s{
-to{transform:rotate(360deg)}
-}
-
-button,a,input{
-transition:
-transform .5s cubic-bezier(.22,1,.36,1),
-opacity .5s ease,
-border-color .5s ease,
-box-shadow .5s ease,
-background .5s ease
+  transition:
+    transform .5s cubic-bezier(.22,1,.36,1),
+    opacity .5s ease,
+    border-color .5s ease,
+    box-shadow .5s ease,
+    background .5s ease;
 }
 
 button:not(:disabled):hover,
 a.btn:hover{
-transform:translateY(-3px)
+  transform:translateY(-3px);
 }
 
 button:disabled{
-opacity:.55;
-cursor:not-allowed
+  opacity:.55;
+  cursor:not-allowed;
 }
+
+/* =========================
+   Layout
+========================= */
+
+.wrap{
+  width:min(1160px,calc(100% - 30px));
+  margin:auto;
+  padding:35px 0 70px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.top-left{
+  min-width:0;
+}
+
+.brand{
+  direction:ltr;
+  unicode-bidi:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:0;
+  font-size:32px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.gold{
+  color:var(--gold);
+}
+
+.badge{
+  display:inline-block;
+  margin-top:6px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(62,227,154,.15);
+  color:var(--mint);
+  line-height:1.2;
+}
+
+.actions,
+.row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+/* =========================
+   Buttons
+========================= */
+
+.btn{
+  border:0;
+  cursor:pointer;
+  border-radius:15px;
+  padding:9px 13px;
+  font:15px Lalezar;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  box-shadow:0 5px 0 rgba(0,0,0,.3);
+  margin:4px;
+}
+
+.btn i{
+  font-size:15px;
+}
+
+.mint{
+  background:linear-gradient(180deg,#6af3b8,#17c77a);
+  color:#042016;
+}
+
+.goldbtn{
+  background:linear-gradient(180deg,#ffd27a,#ff9d1f);
+  color:var(--ink);
+}
+
+.rose{
+  background:linear-gradient(180deg,#ff8a97,#e23b4d);
+  color:#fff;
+}
+
+.home{
+  background:linear-gradient(180deg,#8ab0ff,#4d7dff);
+  color:#061018;
+  text-decoration:none;
+}
+
+.ghost{
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+
+/* =========================
+   Panels
+========================= */
+
+.panel,
+.server{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.085),
+      rgba(255,180,58,.045),
+      rgba(255,255,255,.025)
+    );
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  padding:15px;
+  margin-top:13px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 18px 45px rgba(0,0,0,.18);
+}
+
+/* =========================
+   Inputs
+========================= */
+
+input{
+  width:100%;
+  padding:10px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.055);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  color:var(--text);
+  font:14px Lalezar;
+  outline:none;
+}
+
+input:focus{
+  border-color:rgba(255,180,58,.55);
+  box-shadow:0 0 0 3px rgba(255,180,58,.08);
+}
+
+input[type=file]{
+  padding:8px;
+  cursor:pointer;
+}
+
+input[type=file]::file-selector-button{
+  border:1px solid rgba(255,186,92,.35);
+  border-radius:10px;
+  padding:7px 11px;
+  margin-inline-end:9px;
+  background:linear-gradient(180deg,#ffd27a,#ff9d1f);
+  color:#140f0a;
+  font:14px Lalezar;
+  cursor:pointer;
+  transition:all .5s cubic-bezier(.22,1,.36,1);
+}
+
+input[type=file]::file-selector-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 20px rgba(255,180,58,.22);
+}
+
+label{
+  display:block;
+  color:var(--gold);
+  margin:8px 0 5px;
+}
+
+/* =========================
+   Songs
+========================= */
+
+.song{
+  padding:14px;
+  margin:10px 0;
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.song:first-child{
+  margin-top:4px;
+}
+
+.song-title{
+  font-size:20px;
+  margin-bottom:4px;
+}
+
+.song-info{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin:7px 0;
+}
+
+.format{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:3px 9px;
+  border-radius:999px;
+  font-size:12px;
+  background:rgba(255,180,58,.13);
+  color:var(--gold);
+}
+
+.format.mp3{
+  background:rgba(62,227,154,.13);
+  color:var(--mint);
+}
+
+.url{
+  direction:ltr;
+  text-align:left;
+  word-break:break-all;
+  color:var(--muted);
+  font-family:monospace;
+  font-size:12px;
+  margin:8px 0;
+}
+
+/* =========================
+   Player
+========================= */
+
+.player{
+  width:100%;
+  padding:10px;
+  border-radius:15px;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.07),
+      rgba(255,180,58,.035)
+    );
+  margin:10px 0;
+}
+
+.player-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.play-btn{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  border:1px solid rgba(255,186,92,.28);
+  background:linear-gradient(180deg,#ffd27a,#ff9d1f);
+  color:#140f0a;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 5px 0 rgba(0,0,0,.25);
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.play-btn:hover{
+  box-shadow:
+    0 8px 22px rgba(255,180,58,.18),
+    0 5px 0 rgba(0,0,0,.25);
+}
+
+.player-main{
+  flex:1;
+  min-width:0;
+}
+
+.player-name{
+  font-size:15px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.player-time{
+  color:var(--muted);
+  font-size:12px;
+  direction:ltr;
+  text-align:left;
+  margin-top:2px;
+}
+
+.seek{
+  width:100%;
+  height:8px;
+  margin-top:8px;
+  appearance:none;
+  -webkit-appearance:none;
+  border-radius:999px;
+  background:#211a12;
+  outline:none;
+  padding:0;
+  border:0;
+}
+
+.seek::-webkit-slider-thumb{
+  appearance:none;
+  -webkit-appearance:none;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:var(--gold);
+  cursor:pointer;
+  box-shadow:0 0 0 3px rgba(255,180,58,.15);
+}
+
+.seek::-moz-range-thumb{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  border:0;
+  background:var(--gold);
+  cursor:pointer;
+}
+
+.volume{
+  width:90px;
+  height:7px;
+  appearance:none;
+  -webkit-appearance:none;
+  border-radius:999px;
+  background:#211a12;
+  padding:0;
+  border:0;
+}
+
+.volume::-webkit-slider-thumb{
+  appearance:none;
+  -webkit-appearance:none;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:var(--mint);
+  cursor:pointer;
+}
+
+.volume::-moz-range-thumb{
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  border:0;
+  background:var(--mint);
+  cursor:pointer;
+}
+
+.player-bottom{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:8px;
+  flex-wrap:wrap;
+}
+
+/* =========================
+   Modal
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(8,6,4,.62);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+  opacity:1;
+  animation:modalIn .55s cubic-bezier(.22,1,.36,1);
+}
+
+.modal.closing{
+  animation:modalOut .5s cubic-bezier(.55,0,.78,.18) forwards;
+}
+
+.modal.hidden{
+  display:none;
+}
+
+.modalbox{
+  width:min(550px,calc(100% - 30px));
+  max-height:92vh;
+  overflow:auto;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:rgba(22,17,12,.72);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  animation:boxIn .6s cubic-bezier(.22,1,.36,1);
+}
+
+.modal.closing .modalbox{
+  animation:boxOut .45s cubic-bezier(.55,0,.78,.18) forwards;
+}
+
+@keyframes modalIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes modalOut{
+  from{opacity:1}
+  to{opacity:0}
+}
+
+@keyframes boxIn{
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.96)
+  }
+  to{
+    opacity:1;
+    transform:none
+  }
+}
+
+@keyframes boxOut{
+  to{
+    opacity:0;
+    transform:translateY(16px) scale(.96)
+  }
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================
+   Loading / Progress
+========================= */
+
+.loading{
+  text-align:center;
+  color:var(--muted);
+}
+
+.bar{
+  height:12px;
+  border-radius:999px;
+  background:#1b1711;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--gold),var(--mint));
+  transition:width .25s ease;
+}
+
+/* =========================
+   Toast
+========================= */
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translate(-50%,22px) scale(.96);
+  padding:12px 18px;
+  border-radius:14px;
+  background:rgba(23,18,13,.68);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--line);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  opacity:0;
+  animation:toastIn .55s cubic-bezier(.22,1,.36,1) forwards;
+  z-index:200;
+}
+
+.toast.hide{
+  animation:toastOut .55s cubic-bezier(.55,0,.78,.18) forwards;
+}
+
+@keyframes toastIn{
+  to{
+    opacity:1;
+    transform:translate(-50%,0) scale(1)
+  }
+}
+
+@keyframes toastOut{
+  to{
+    opacity:0;
+    transform:translate(-50%,18px) scale(.94)
+  }
+}
+
+.ok{
+  color:#9dffc9;
+}
+
+.err{
+  color:#ffb0b7;
+}
+
+/* =========================
+   Spinner
+========================= */
+
+.spin{
+  display:inline-block;
+  width:16px;
+  height:16px;
+  border:2px solid rgba(0,0,0,.25);
+  border-top-color:#111;
+  border-radius:50%;
+  animation:s .7s linear infinite;
+}
+
+@keyframes s{
+  to{transform:rotate(360deg)}
+}
+
+/* =========================
+   Busy
+========================= */
 
 .busy{
-position:fixed;
-inset:auto 50% 18px auto;
-transform:translateX(50%);
-display:flex;
-align-items:center;
-gap:8px;
-padding:9px 14px;
-border:1px solid var(--line);
-border-radius:13px;
-background:rgba(20,15,10,.92);
-backdrop-filter:blur(10px);
-z-index:50;
-box-shadow:0 8px 30px #0008
+  position:fixed;
+  inset:auto 50% 18px auto;
+  transform:translateX(50%);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 14px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:rgba(20,15,10,.92);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  z-index:50;
+  box-shadow:0 8px 30px #0008;
 }
 
-.busy.hidden{display:none}
+.busy.hidden{
+  display:none;
+}
 
-/* Dialog */
+/* =========================
+   Custom Dialog
+========================= */
 
 .custom-dialog{
-position:fixed;
-inset:0;
-background:rgba(8,6,4,.68);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:150;
-animation:dialogIn .35s cubic-bezier(.22,1,.36,1)
+  position:fixed;
+  inset:0;
+  background:rgba(8,6,4,.68);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:150;
+  animation:dialogIn .35s cubic-bezier(.22,1,.36,1);
 }
 
 .custom-dialog.hidden{
-display:none
+  display:none;
 }
 
 .custom-dialog.closing{
-animation:dialogOut .3s cubic-bezier(.55,0,.78,.18) forwards
+  animation:dialogOut .3s cubic-bezier(.55,0,.78,.18) forwards;
 }
 
 .custom-dialog-box{
-width:min(500px,calc(100% - 30px));
-padding:21px;
-border-radius:20px;
-border:1px solid var(--line);
-background:rgba(22,17,12,.78);
-backdrop-filter:blur(22px);
--webkit-backdrop-filter:blur(22px);
-box-shadow:
-0 28px 80px rgba(0,0,0,.55),
-inset 0 1px 0 rgba(255,255,255,.08);
-animation:dialogBoxIn .4s cubic-bezier(.22,1,.36,1)
+  width:min(500px,calc(100% - 30px));
+  padding:21px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:rgba(22,17,12,.78);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  animation:dialogBoxIn .4s cubic-bezier(.22,1,.36,1);
 }
 
 .custom-dialog.closing .custom-dialog-box{
-animation:dialogBoxOut .3s cubic-bezier(.55,0,.78,.18) forwards
+  animation:dialogBoxOut .3s cubic-bezier(.55,0,.78,.18) forwards;
 }
 
 .dialog-title{
-margin:0 0 8px;
-font-size:23px
+  margin:0 0 8px;
+  font-size:23px;
 }
 
 .dialog-message{
-color:var(--muted);
-line-height:1.9;
-white-space:pre-wrap
+  color:var(--muted);
+  line-height:1.9;
+  white-space:pre-wrap;
 }
 
 .dialog-icon{
-font-size:25px;
-vertical-align:-.12em;
-margin-inline-end:7px
+  font-size:25px;
+  vertical-align:-.12em;
+  margin-inline-end:7px;
 }
 
 .dialog-actions{
-display:flex;
-gap:6px;
-flex-wrap:wrap;
-margin-top:17px
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:17px;
 }
 
 @keyframes dialogIn{
-from{opacity:0}
-to{opacity:1}
+  from{opacity:0}
+  to{opacity:1}
 }
 
 @keyframes dialogOut{
-from{opacity:1}
-to{opacity:0}
+  from{opacity:1}
+  to{opacity:0}
 }
 
 @keyframes dialogBoxIn{
-from{
-opacity:0;
-transform:translateY(18px) scale(.96)
-}
-to{
-opacity:1;
-transform:none
-}
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.96)
+  }
+  to{
+    opacity:1;
+    transform:none
+  }
 }
 
 @keyframes dialogBoxOut{
-to{
-opacity:0;
-transform:translateY(16px) scale(.96)
-}
+  to{
+    opacity:0;
+    transform:translateY(16px) scale(.96)
+  }
 }
 
-/* Footer */
+/* =========================
+   Dashboard v1.3 Footer
+========================= */
 
 .footer{
-text-align:center;
-color:var(--muted);
-margin-top:30px;
-font-size:13px;
-line-height:1.8
+  width:min(1160px,calc(100% - 30px));
+  margin:18px auto 0;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.055),
+      rgba(255,180,58,.035),
+      rgba(255,255,255,.018)
+    );
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 14px 35px rgba(0,0,0,.16);
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
 }
 
 .footer-brand{
-font-size:23px;
-color:var(--text)
+  color:var(--text);
+  font-size:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
 }
 
-.footer-brand .gold{
-color:var(--gold)
+.footer-link{
+  color:var(--gold);
+  text-decoration:none;
+  transition:opacity .25s;
+}
+
+.footer-link:hover{
+  opacity:.75;
+}
+
+.footer-dot{
+  width:4px;
+  height:4px;
+  display:inline-block;
+  border-radius:50%;
+  background:var(--gold);
+  opacity:.7;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media(max-width:850px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:650px){
+  .wrap{
+    padding:18px 11px 50px;
+  }
+
+  .header,
+  .head{
+    align-items:center;
+  }
+
+  .brand{
+    font-size:27px;
+  }
+
+  .btn{
+    padding:9px 11px;
+  }
+
+  .modalbox{
+    padding:15px;
+    max-height:94vh;
+  }
+
+  .actions{
+    width:100%;
+  }
+}
+
+@media(max-width:500px){
+  .footer{
+    width:calc(100% - 20px);
+    margin-top:12px;
+    padding:11px 12px;
+    font-size:11px;
+  }
+
+  .footer-brand{
+    font-size:14px;
+  }
+
+  .song-title{
+    font-size:18px;
+  }
+
+  .player-bottom{
+    gap:7px;
+  }
+
+  .volume{
+    width:75px;
+  }
 }
 </style>
 </head>
@@ -626,50 +869,77 @@ color:var(--gold)
 
 <div class="wrap">
 
-<div class="head">
+<header class="header head">
 
-<div>
-<div class="brand">
-<span class="gold">H</span>Panel <span class="gold">R</span>adio
+<div class="top-left">
+
+<div class="brand" dir="ltr">
+<span class="gold">H</span><span class="gold">P</span>anel
+<span>&nbsp;<span class="gold">R</span>adio</span>
+<span class="gold">&nbsp;v1.3</span>
 </div>
+
 <span id="role" class="badge"></span>
+
 </div>
 
-<div>
+<div class="actions">
 
 <button class="btn rose" onclick="logout()">
-<i class="bi bi-box-arrow-right"></i>خروج
+<i class="bi bi-box-arrow-right"></i>
+خروج
 </button>
 
-<a class="btn home" href="https://herculepanel.github.io/">
-<i class="bi bi-house"></i>منوی اصلی
+<a
+class="btn home"
+href="https://herculepanel.github.io/"
+>
+<i class="bi bi-house"></i>
+منوی اصلی
 </a>
 
 <button class="btn ghost" onclick="refreshSongs()">
-<i class="bi bi-arrow-clockwise"></i>تازه‌سازی
+<i class="bi bi-arrow-clockwise"></i>
+تازه‌سازی
 </button>
 
 </div>
 
-</div>
+</header>
+
 
 <div id="loading" class="panel loading">
-checking login data...
+
+در حال بررسی اطلاعات ورود...
+
 <span class="spin"></span>
+
 </div>
 
+
 <div id="busy" class="busy hidden">
+
 <span class="spin"></span>
-<span id="busyText">در حال انجام...</span>
+
+<span id="busyText">
+در حال انجام...
+</span>
+
 </div>
+
 
 <div id="app" style="display:none">
 
 <div class="panel">
 
+<div class="actions">
+
 <button class="btn mint" onclick="openAdd()">
-<i class="bi bi-plus-circle"></i>افزودن آهنگ
+<i class="bi bi-plus-circle"></i>
+افزودن آهنگ
 </button>
+
+</div>
 
 <div id="songs"></div>
 
@@ -677,17 +947,49 @@ checking login data...
 
 </div>
 
-<div class="footer">
+
+<footer class="footer">
 
 <div class="footer-brand">
-<span class="gold">H</span>Panel <span class="gold">R</span>adio
+
+<span>
+<span class="gold">HP</span>anel <span class="gold">R</span>adio
+</span>
+
+<span class="footer-dot"></span>
+
+<span>
+نسخه 1.3
+</span>
+
 </div>
 
-<div>نسخه 1.3</div>
-<div>ساخته شده با ♥ برای اکوسیستم HPanel</div>
-<div>HerculePanel • Secure • Glassy • Lightweight</div>
+
+<div>
+ساخته شده با
+<span class="gold">♥</span>
+برای اکوسیستم HPanel
+</div>
+
+
+<div>
+
+<a
+class="footer-link"
+href="https://herculepanel.github.io/"
+>
+HerculePanel
+</a>
+
+<span class="footer-dot"></span>
+
+<span>
+Secure • Glassy • Lightweight
+</span>
 
 </div>
+
+</footer>
 
 </div>
 
@@ -704,9 +1006,14 @@ checking login data...
 </h2>
 
 <label>عنوان</label>
-<input id="title" placeholder="عنوان آهنگ">
+
+<input
+id="title"
+placeholder="عنوان آهنگ"
+>
 
 <label>فایل صوتی</label>
+
 <input
 id="file"
 type="file"
@@ -714,6 +1021,7 @@ accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac"
 >
 
 <label>یا لینک مستقیم آهنگ</label>
+
 <input
 id="url"
 type="url"
@@ -721,7 +1029,12 @@ placeholder="https://..."
 >
 
 <div id="progress" class="bar">
-<div id="fill" class="fill"></div>
+
+<div
+id="fill"
+class="fill"
+></div>
+
 </div>
 
 <button class="btn mint" onclick="saveSong()">
@@ -735,6 +1048,7 @@ placeholder="https://..."
 </button>
 
 </div>
+
 </div>
 
 
@@ -749,13 +1063,21 @@ placeholder="https://..."
 ویرایش آهنگ
 </h2>
 
-<input type="hidden" id="editIndex">
+<input
+type="hidden"
+id="editIndex"
+>
 
 <label>عنوان</label>
+
 <input id="editTitle">
 
 <label>لینک</label>
-<input id="editUrl" type="url">
+
+<input
+id="editUrl"
+type="url"
+>
 
 <button class="btn mint" onclick="saveEdit()">
 <i class="bi bi-check-lg"></i>
@@ -768,20 +1090,33 @@ placeholder="https://..."
 </button>
 
 </div>
+
 </div>
 
 
 <!-- Custom Dialog -->
 
-<div id="customDialog" class="custom-dialog hidden">
+<div
+id="customDialog"
+class="custom-dialog hidden"
+>
 
 <div class="custom-dialog-box">
 
-<h2 id="dialogTitle" class="dialog-title"></h2>
+<h2
+id="dialogTitle"
+class="dialog-title"
+></h2>
 
-<div id="dialogMessage" class="dialog-message"></div>
+<div
+id="dialogMessage"
+class="dialog-message"
+></div>
 
-<div id="dialogActions" class="dialog-actions"></div>
+<div
+id="dialogActions"
+class="dialog-actions"
+></div>
 
 </div>
 
@@ -812,17 +1147,26 @@ let songs=[];
 /* ---------------- Auth ---------------- */
 
 function getAuth(){
+
 try{
-return JSON.parse(localStorage.getItem(AUTH)||"null");
+
+return JSON.parse(
+localStorage.getItem(AUTH)||"null"
+);
+
 }catch{
+
 return null;
+
 }
+
 }
 
 
 function recoverRadioToken(){
 
-let t=localStorage.getItem(TK)||"";
+let t=
+localStorage.getItem(TK)||"";
 
 if(t)return t;
 
@@ -843,7 +1187,10 @@ String(x.name||"")
 
 if(x?.token){
 
-localStorage.setItem(TK,x.token);
+localStorage.setItem(
+TK,
+x.token
+);
 
 return x.token;
 
@@ -852,14 +1199,20 @@ return x.token;
 }catch{}
 
 return "";
+
 }
 
 
 /* ---------------- UI ---------------- */
 
-function busy(on,text="در حال انجام..."){
+function busy(
+on,
+text="در حال انجام..."
+){
 
-document.getElementById("busyText").textContent=text;
+document.getElementById(
+"busyText"
+).textContent=text;
 
 document
 .getElementById("busy")
@@ -871,7 +1224,8 @@ document
 
 function toast(t,c=""){
 
-const x=document.createElement("div");
+const x=
+document.createElement("div");
 
 x.className="toast "+c;
 x.textContent=t;
@@ -882,7 +1236,10 @@ setTimeout(()=>{
 
 x.classList.add("hide");
 
-setTimeout(()=>x.remove(),550);
+setTimeout(
+()=>x.remove(),
+550
+);
 
 },3000);
 
@@ -893,9 +1250,14 @@ setTimeout(()=>x.remove(),550);
 
 function closeCustomDialog(){
 
-const d=document.getElementById("customDialog");
+const d=
+document.getElementById(
+"customDialog"
+);
 
-if(d.classList.contains("hidden"))return;
+if(
+d.classList.contains("hidden")
+)return;
 
 d.classList.add("closing");
 
@@ -917,10 +1279,25 @@ type="info"
 
 return new Promise(resolve=>{
 
-const d=document.getElementById("customDialog");
-const t=document.getElementById("dialogTitle");
-const m=document.getElementById("dialogMessage");
-const a=document.getElementById("dialogActions");
+const d=
+document.getElementById(
+"customDialog"
+);
+
+const t=
+document.getElementById(
+"dialogTitle"
+);
+
+const m=
+document.getElementById(
+"dialogMessage"
+);
+
+const a=
+document.getElementById(
+"dialogActions"
+);
 
 const icons={
 info:"bi-info-circle",
@@ -930,7 +1307,8 @@ warning:"bi-exclamation-triangle"
 };
 
 const buttonClass=
-type==="error"||type==="warning"
+type==="error"||
+type==="warning"
 ?"rose"
 :"mint";
 
@@ -940,19 +1318,35 @@ t.innerHTML=
 m.textContent=message;
 
 a.innerHTML=`
-<button class="btn ${buttonClass}" id="dialogOK">
+
+<button
+class="btn ${buttonClass}"
+id="dialogOK"
+>
+
 <i class="bi bi-check-lg"></i>
+
 باشه
+
 </button>
+
 `;
 
-d.classList.remove("hidden","closing");
+d.classList.remove(
+"hidden",
+"closing"
+);
 
-document.getElementById("dialogOK").onclick=()=>{
+document.getElementById(
+"dialogOK"
+).onclick=()=>{
 
 closeCustomDialog();
 
-setTimeout(()=>resolve(),300);
+setTimeout(
+()=>resolve(),
+300
+);
 
 };
 
@@ -968,10 +1362,25 @@ title="تأیید"
 
 return new Promise(resolve=>{
 
-const d=document.getElementById("customDialog");
-const t=document.getElementById("dialogTitle");
-const m=document.getElementById("dialogMessage");
-const a=document.getElementById("dialogActions");
+const d=
+document.getElementById(
+"customDialog"
+);
+
+const t=
+document.getElementById(
+"dialogTitle"
+);
+
+const m=
+document.getElementById(
+"dialogMessage"
+);
+
+const a=
+document.getElementById(
+"dialogActions"
+);
 
 t.innerHTML=
 `<i class="bi bi-question-circle dialog-icon"></i>${esc(title)}`;
@@ -980,33 +1389,58 @@ m.textContent=message;
 
 a.innerHTML=`
 
-<button class="btn mint" id="dialogYes">
+<button
+class="btn mint"
+id="dialogYes"
+>
+
 <i class="bi bi-check-lg"></i>
+
 بله
+
 </button>
 
-<button class="btn ghost" id="dialogNo">
+<button
+class="btn ghost"
+id="dialogNo"
+>
+
 <i class="bi bi-x-lg"></i>
+
 خیر
+
 </button>
 
 `;
 
-d.classList.remove("hidden","closing");
+d.classList.remove(
+"hidden",
+"closing"
+);
 
-document.getElementById("dialogYes").onclick=()=>{
+document.getElementById(
+"dialogYes"
+).onclick=()=>{
 
 closeCustomDialog();
 
-setTimeout(()=>resolve(true),300);
+setTimeout(
+()=>resolve(true),
+300
+);
 
 };
 
-document.getElementById("dialogNo").onclick=()=>{
+document.getElementById(
+"dialogNo"
+).onclick=()=>{
 
 closeCustomDialog();
 
-setTimeout(()=>resolve(false),300);
+setTimeout(
+()=>resolve(false),
+300
+);
 
 };
 
@@ -1017,16 +1451,25 @@ setTimeout(()=>resolve(false),300);
 
 /* ---------------- GitHub API ---------------- */
 
-function api(path,opt={}){
+function api(
+path,
+opt={}
+){
 
 return fetch(
 "https://api.github.com"+path,
 {
 ...opt,
 headers:{
-"Accept":"application/vnd.github+json",
-"X-GitHub-Api-Version":"2022-11-28",
-"Authorization":"Bearer "+token,
+"Accept":
+"application/vnd.github+json",
+
+"X-GitHub-Api-Version":
+"2022-11-28",
+
+"Authorization":
+"Bearer "+token,
+
 ...(opt.headers||{})
 }
 }
@@ -1035,11 +1478,17 @@ headers:{
 }
 
 
-async function json(path,opt={}){
+async function json(
+path,
+opt={}
+){
 
-const r=await api(path,opt);
+const r=
+await api(path,opt);
 
-const d=await r.json().catch(()=>null);
+const d=
+await r.json()
+.catch(()=>null);
 
 if(!r.ok)
 throw Error(
@@ -1057,11 +1506,21 @@ return d;
 function esc(s){
 
 return String(s??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+.replaceAll(
+"&","&amp;"
+)
+.replaceAll(
+"<","&lt;"
+)
+.replaceAll(
+">","&gt;"
+)
+.replaceAll(
+'"',"&quot;"
+)
+.replaceAll(
+"'","&#039;"
+);
 
 }
 
@@ -1091,7 +1550,8 @@ function isMp3Url(url){
 
 try{
 
-const u=new URL(url);
+const u=
+new URL(url);
 
 const pathname=
 u.pathname
@@ -1112,13 +1572,17 @@ return false;
 
 function getExtension(name){
 
-const n=String(name||"");
+const n=
+String(name||"");
 
-const p=n.lastIndexOf(".");
+const p=
+n.lastIndexOf(".");
 
 if(p<0)return "";
 
-return n.slice(p+1).toLowerCase();
+return n.slice(
+p+1
+).toLowerCase();
 
 }
 
@@ -1126,8 +1590,14 @@ return n.slice(p+1).toLowerCase();
 function safeFileName(name){
 
 return String(name||"file")
-.replace(/[\\/:*?"<>|]/g,"_")
-.replace(/\s+/g,"_");
+.replace(
+/[\\/:*?"<>|]/g,
+"_"
+)
+.replace(
+/\s+/g,
+"_"
+);
 
 }
 
@@ -1140,20 +1610,31 @@ await json(
 "/gists/"+C.gist,
 {
 method:"PATCH",
+
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
+
 body:JSON.stringify({
+
 files:{
+
 [C.file]:{
-content:JSON.stringify(
+
+content:
+JSON.stringify(
 {songs},
 null,
 2
 )
+
 }
+
 }
+
 })
+
 }
 );
 
@@ -1164,17 +1645,26 @@ null,
 
 async function loadSongs(){
 
-busy(true,"در حال بارگذاری آهنگ‌ها...");
+busy(
+true,
+"در حال بارگذاری آهنگ‌ها..."
+);
 
 try{
 
-const d=await json("/gists/"+C.gist);
+const d=
+await json(
+"/gists/"+C.gist
+);
 
-const f=d.files?.[C.file];
+const f=
+d.files?.[C.file];
 
 songs=f
-?JSON.parse(
-f.content||'{"songs":[]}'
+?
+JSON.parse(
+f.content||
+'{"songs":[]}'
 ).songs||[]
 :[];
 
@@ -1191,52 +1681,80 @@ busy(false);
 
 function render(){
 
-const box=document.getElementById("songs");
+const box=
+document.getElementById(
+"songs"
+);
 
 if(!songs.length){
 
 box.innerHTML=`
+
 <p>
+
 <i class="bi bi-music-note"></i>
+
 هنوز آهنگی نیست.
+
 </p>
+
 `;
 
 return;
 
 }
 
-box.innerHTML=songs.map((s,i)=>{
+box.innerHTML=
+songs.map((s,i)=>{
 
 const mp3=
 isMp3Url(s.url) ||
-String(s.format||"").toLowerCase()==="mp3";
+String(s.format||"")
+.toLowerCase()==="mp3";
 
-const converting=!!s.converting;
+const converting=
+!!s.converting;
 
 return `
 
 <div class="song">
 
 <div class="song-title">
+
 <i class="bi bi-music-note-beamed"></i>
+
 ${esc(s.title||"بدون عنوان")}
+
 </div>
 
 <div class="song-info">
 
 <span class="format ${mp3?"mp3":""}">
-<i class="bi ${mp3?"bi-file-earmark-music":"bi-file-earmark"}"></i>
+
+<i class="bi ${
+mp3
+?"bi-file-earmark-music"
+:"bi-file-earmark"
+}"></i>
+
 ${mp3?"MP3":"غیر MP3"}
+
 </span>
 
 ${
 converting
 ?
-`<span class="format">
+`
+
+<span class="format">
+
 <i class="bi bi-arrow-repeat"></i>
+
 در حال تبدیل...
-</span>`
+
+</span>
+
+`
 :""
 }
 
@@ -1252,24 +1770,39 @@ class="play-btn"
 id="play-${i}"
 onclick="togglePlay(${i})"
 >
+
 <i class="bi bi-play-fill"></i>
+
 </button>
 
 <div class="player-main">
 
 <div class="player-name">
-${esc(s.title||"بدون عنوان")}
+
+${esc(
+s.title||"بدون عنوان"
+)}
+
 </div>
 
 <div class="player-time">
-<span id="current-${i}">00:00</span>
+
+<span id="current-${i}">
+00:00
+</span>
+
 /
-<span id="duration-${i}">00:00</span>
-</div>
+
+<span id="duration-${i}">
+00:00
+</span>
 
 </div>
 
 </div>
+
+</div>
+
 
 <input
 id="seek-${i}"
@@ -1281,6 +1814,7 @@ value="0"
 step="0.1"
 oninput="seekAudio(${i},this.value)"
 >
+
 
 <div class="player-bottom">
 
@@ -1312,18 +1846,23 @@ onerror="audioError(${i})"
 
 
 <div class="url">
+
 ${esc(s.url)}
+
 </div>
 
 
-<div>
+<div class="actions">
 
 <button
 class="btn goldbtn"
 onclick="copy(${i})"
 >
+
 <i class="bi bi-clipboard"></i>
+
 کپی لینک
+
 </button>
 
 <a
@@ -1332,30 +1871,43 @@ href="${esc(s.url)}"
 target="_blank"
 rel="noopener"
 >
+
 <i class="bi bi-box-arrow-up-right"></i>
+
 باز کردن
+
 </a>
 
 <button
 class="btn mint"
 onclick="openEdit(${i})"
 >
+
 <i class="bi bi-pencil-square"></i>
+
 ویرایش
+
 </button>
 
 ${
 !mp3 && !converting
 ?
+
 `
+
 <button
 class="btn goldbtn"
 onclick="convertSong(${i})"
 >
+
 <i class="bi bi-filetype-mp3"></i>
+
 تبدیل به MP3
+
 </button>
+
 `
+
 :""
 }
 
@@ -1363,8 +1915,11 @@ onclick="convertSong(${i})"
 class="btn rose"
 onclick="del(${i})"
 >
+
 <i class="bi bi-trash3"></i>
+
 حذف
+
 </button>
 
 </div>
@@ -1382,28 +1937,38 @@ onclick="del(${i})"
 
 function getAudio(i){
 
-return document.getElementById("audio-"+i);
+return document.getElementById(
+"audio-"+i
+);
 
 }
 
 
 function togglePlay(i){
 
-const audio=getAudio(i);
+const audio=
+getAudio(i);
 
 if(!audio)return;
 
 if(audio.paused){
 
-document.querySelectorAll("audio").forEach(x=>{
+document
+.querySelectorAll("audio")
+.forEach(x=>{
 
-if(x!==audio)x.pause();
+if(x!==audio)
+x.pause();
 
 });
 
-audio.play().catch(()=>{
+audio.play()
+.catch(()=>{
 
-toast("پخش آهنگ ممکن نیست","err");
+toast(
+"پخش آهنگ ممکن نیست",
+"err"
+);
 
 });
 
@@ -1420,8 +1985,13 @@ updatePlayButton(i);
 
 function updatePlayButton(i){
 
-const audio=getAudio(i);
-const btn=document.getElementById("play-"+i);
+const audio=
+getAudio(i);
+
+const btn=
+document.getElementById(
+"play-"+i
+);
 
 if(!audio||!btn)return;
 
@@ -1437,35 +2007,55 @@ audio.paused
 
 function audioLoaded(i){
 
-const audio=getAudio(i);
+const audio=
+getAudio(i);
 
 if(!audio)return;
 
-const d=document.getElementById("duration-"+i);
+const d=
+document.getElementById(
+"duration-"+i
+);
 
-d.textContent=formatTime(audio.duration);
+d.textContent=
+formatTime(
+audio.duration
+);
 
 }
 
 
 function audioTime(i){
 
-const audio=getAudio(i);
+const audio=
+getAudio(i);
 
 if(!audio)return;
 
-const seek=document.getElementById("seek-"+i);
-const current=document.getElementById("current-"+i);
+const seek=
+document.getElementById(
+"seek-"+i
+);
+
+const current=
+document.getElementById(
+"current-"+i
+);
 
 if(audio.duration){
 
 seek.value=
-(audio.currentTime/audio.duration)*100;
+(
+audio.currentTime/
+audio.duration
+)*100;
 
 }
 
 current.textContent=
-formatTime(audio.currentTime);
+formatTime(
+audio.currentTime
+);
 
 updatePlayButton(i);
 
@@ -1474,9 +2064,13 @@ updatePlayButton(i);
 
 function audioEnded(i){
 
-const seek=document.getElementById("seek-"+i);
+const seek=
+document.getElementById(
+"seek-"+i
+);
 
-if(seek)seek.value=0;
+if(seek)
+seek.value=0;
 
 updatePlayButton(i);
 
@@ -1495,22 +2089,27 @@ songs[i]?.url
 
 function seekAudio(i,value){
 
-const audio=getAudio(i);
+const audio=
+getAudio(i);
 
-if(!audio||!audio.duration)return;
+if(!audio||!audio.duration)
+return;
 
 audio.currentTime=
-(Number(value)/100)*audio.duration;
+(Number(value)/100)*
+audio.duration;
 
 }
 
 
 function setVolume(i,value){
 
-const audio=getAudio(i);
+const audio=
+getAudio(i);
 
 if(audio)
-audio.volume=Number(value);
+audio.volume=
+Number(value);
 
 }
 
@@ -1520,7 +2119,10 @@ function formatTime(sec){
 if(!Number.isFinite(sec))
 return "00:00";
 
-sec=Math.max(0,Math.floor(sec));
+sec=Math.max(
+0,
+Math.floor(sec)
+);
 
 const m=
 Math.floor(sec/60)
@@ -1544,16 +2146,24 @@ function openAdd(){
 document
 .getElementById("modal")
 .classList
-.remove("hidden","closing");
+.remove(
+"hidden",
+"closing"
+);
 
 }
 
 
 function closeAdd(){
 
-const m=document.getElementById("modal");
+const m=
+document.getElementById(
+"modal"
+);
 
-if(m.classList.contains("hidden"))
+if(
+m.classList.contains("hidden")
+)
 return;
 
 m.classList.add("closing");
@@ -1570,10 +2180,21 @@ m.classList.remove("closing");
 
 function resetAdd(){
 
-document.getElementById("title").value="";
-document.getElementById("file").value="";
-document.getElementById("url").value="";
-document.getElementById("fill").style.width="0%";
+document.getElementById(
+"title"
+).value="";
+
+document.getElementById(
+"file"
+).value="";
+
+document.getElementById(
+"url"
+).value="";
+
+document.getElementById(
+"fill"
+).style.width="0%";
 
 }
 
@@ -1582,15 +2203,19 @@ document.getElementById("fill").style.width="0%";
 
 function b64(file){
 
-return new Promise((res,rej)=>{
+return new Promise(
+(res,rej)=>{
 
-const r=new FileReader();
+const r=
+new FileReader();
 
 r.onload=()=>{
+
 res(
 String(r.result)
 .split(",")[1]
 );
+
 };
 
 r.onerror=rej;
@@ -1606,7 +2231,10 @@ r.readAsDataURL(file);
 
 async function uploadFileToRepo(file){
 
-const safeName=safeFileName(file.name);
+const safeName=
+safeFileName(
+file.name
+);
 
 const path=
 C.folder+"/"+safeName;
@@ -1614,33 +2242,52 @@ C.folder+"/"+safeName;
 const content=
 await b64(file);
 
-document.getElementById("fill").style.width="30%";
+document.getElementById(
+"fill"
+).style.width="30%";
 
-const result=await json(
+const result=
+await json(
 "/repos/"+C.owner+"/"+C.repo+
 "/contents/"+
 encodeURIComponent(path)
-.replace(/%2F/g,"/"),
+.replace(
+/%2F/g,
+"/"
+),
 {
 method:"PUT",
+
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
+
 body:JSON.stringify({
-message:"Add audio "+safeName,
+
+message:
+"Add audio "+safeName,
+
 content,
+
 branch:C.branch
+
 })
+
 }
 );
 
-document.getElementById("fill").style.width="100%";
+document.getElementById(
+"fill"
+).style.width="100%";
 
-return {
+return{
+
 path,
 name:safeName,
 url:publicUrl(safeName),
 sha:result.content?.sha||""
+
 };
 
 }
@@ -1651,30 +2298,44 @@ sha:result.content?.sha||""
 async function saveSong(){
 
 const title=
-document.getElementById("title")
+document.getElementById(
+"title"
+)
 .value
 .trim();
 
 const file=
-document.getElementById("file")
+document.getElementById(
+"file"
+)
 .files[0];
 
 let url=
-document.getElementById("url")
+document.getElementById(
+"url"
+)
 .value
 .trim();
 
 
 if(!title){
 
-toast("عنوان را بنویس","err");
+toast(
+"عنوان را بنویس",
+"err"
+);
+
 return;
 
 }
 
 if(!file&&!url){
 
-toast("فایل یا لینک را وارد کن","err");
+toast(
+"فایل یا لینک را وارد کن",
+"err"
+);
+
 return;
 
 }
@@ -1684,13 +2345,14 @@ return;
 IMPORTANT:
 For uploaded files we determine MP3
 using the filename extension, NOT the browser MIME.
-This prevents browsers incorrectly reporting
-audio files as audio/mpeg.
 */
 
 if(file){
 
-if(file.size>20*1024*1024){
+if(
+file.size>
+20*1024*1024
+){
 
 toast(
 "حجم فایل باید کمتر از ۲۰ مگابایت باشد",
@@ -1701,7 +2363,8 @@ return;
 
 }
 
-const mp3=isMp3File(file);
+const mp3=
+isMp3File(file);
 
 
 /*
@@ -1710,14 +2373,15 @@ Non-MP3 confirmation happens BEFORE upload.
 
 if(!mp3){
 
-const yes=await customConfirm(
+const yes=
+await customConfirm(
 
 "این فایل یک فایل MP3 نیست.\n\n"+
 "این فایل نمی‌تواند مستقیماً در بازی نوشته شود.\n\n"+
 "تبدیل فایل به MP3 بعد از آپلود از داخل همین وب‌سایت امکان‌پذیر است.\n\n"+
 "آیا می‌خواهید با آپلود فایل ادامه دهید؟",
 
-"فایل MP3 نیست",
+"فایل MP3 نیست"
 
 );
 
@@ -1727,7 +2391,7 @@ if(!yes)return;
 
 
 /*
-Now upload to the repository FIRST.
+Now upload to repository FIRST.
 */
 
 busy(
@@ -1742,7 +2406,9 @@ mp3
 try{
 
 const uploaded=
-await uploadFileToRepo(file);
+await uploadFileToRepo(
+file
+);
 
 
 /*
@@ -1753,11 +2419,23 @@ add it to the Gist.
 songs.push({
 
 title,
+
 url:uploaded.url,
+
 size:file.size,
-added:new Date().toISOString(),
-format:mp3?"mp3":"source",
-sourceFile:uploaded.path,
+
+added:
+new Date()
+.toISOString(),
+
+format:
+mp3
+?"mp3"
+:"source",
+
+sourceFile:
+uploaded.path,
+
 converting:false
 
 });
@@ -1772,6 +2450,7 @@ await saveGist();
 render();
 
 closeAdd();
+
 resetAdd();
 
 toast(
@@ -1785,7 +2464,10 @@ mp3
 
 }catch(e){
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }finally{
 
@@ -1804,16 +2486,22 @@ URL mode.
 
 if(!/^https?:\/\//i.test(url)){
 
-toast("لینک نامعتبر است","err");
+toast(
+"لینک نامعتبر است",
+"err"
+);
+
 return;
 
 }
 
-const mp3=isMp3Url(url);
+const mp3=
+isMp3Url(url);
 
 if(!mp3){
 
-const yes=await customConfirm(
+const yes=
+await customConfirm(
 
 "این لینک به یک فایل MP3 ختم نمی‌شود.\n\n"+
 "این فایل احتمالاً نمی‌تواند مستقیماً در بازی استفاده شود.\n\n"+
@@ -1821,23 +2509,37 @@ const yes=await customConfirm(
 "آیا می‌خواهید ادامه دهید؟",
 
 "لینک MP3 نیست"
+
 );
 
 if(!yes)return;
 
 }
 
-busy(true,"در حال ذخیره لینک...");
+busy(
+true,
+"در حال ذخیره لینک..."
+);
 
 try{
 
 songs.push({
 
 title,
+
 url,
+
 size:0,
-added:new Date().toISOString(),
-format:mp3?"mp3":"source",
+
+added:
+new Date()
+.toISOString(),
+
+format:
+mp3
+?"mp3"
+:"source",
+
 converting:false
 
 });
@@ -1847,6 +2549,7 @@ await saveGist();
 render();
 
 closeAdd();
+
 resetAdd();
 
 toast(
@@ -1860,7 +2563,10 @@ mp3
 
 }catch(e){
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }finally{
 
@@ -1881,18 +2587,26 @@ if(!s)return;
 
 if(
 isMp3Url(s.url) ||
-String(s.format||"").toLowerCase()==="mp3"
+String(s.format||"")
+.toLowerCase()==="mp3"
 ){
 
-toast("این آهنگ از قبل MP3 است","ok");
+toast(
+"این آهنگ از قبل MP3 است",
+"ok"
+);
+
 return;
 
 }
 
-
 if(s.converting){
 
-toast("این آهنگ در حال تبدیل است","err");
+toast(
+"این آهنگ در حال تبدیل است",
+"err"
+);
+
 return;
 
 }
@@ -1926,7 +2640,10 @@ const base=
 source
 .split("/")
 .pop()
-.replace(/\.[^/.]+$/,"");
+.replace(
+/\.[^/.]+$/,
+""
+);
 
 const output=
 C.folder+
@@ -1935,7 +2652,8 @@ safeFileName(base)+
 "_converted.mp3";
 
 
-const yes=await customConfirm(
+const yes=
+await customConfirm(
 
 "فایل اصلی در مخزن قرار دارد.\n\n"+
 "GitHub Actions آن را با FFmpeg به MP3 تبدیل می‌کند.\n\n"+
@@ -1969,9 +2687,12 @@ C.workflow+
 "/dispatches",
 {
 method:"POST",
+
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
+
 body:JSON.stringify({
 
 ref:C.branch,
@@ -1982,6 +2703,7 @@ output
 }
 
 })
+
 }
 );
 
@@ -2015,8 +2737,11 @@ Conversion succeeded.
 Update Gist data.
 */
 
-s.url=publicUrl(
-output.split("/").pop()
+s.url=
+publicUrl(
+output
+.split("/")
+.pop()
 );
 
 s.format="mp3";
@@ -2024,9 +2749,11 @@ s.format="mp3";
 s.converting=false;
 
 s.convertedAt=
-new Date().toISOString();
+new Date()
+.toISOString();
 
-s.convertedFile=output;
+s.convertedFile=
+output;
 
 await saveGist();
 
@@ -2042,13 +2769,16 @@ toast(
 s.converting=false;
 
 try{
+
 await saveGist();
+
 }catch{}
 
 render();
 
 toast(
-e.message||"خطا در تبدیل",
+e.message||
+"خطا در تبدیل",
 "err"
 );
 
@@ -2071,9 +2801,12 @@ await json(
 "/repos/"+C.owner+"/"+C.repo+
 "/contents/"+
 encodeURIComponent(path)
-.replace(/%2F/g,"/")
-+
-"?ref="+encodeURIComponent(C.branch)
+.replace(
+/%2F/g,
+"/"
+)+
+"?ref="+
+encodeURIComponent(C.branch)
 );
 
 return true;
@@ -2087,17 +2820,30 @@ return false;
 }
 
 
-async function waitForFile(path,timeout){
+async function waitForFile(
+path,
+timeout
+){
 
-const started=Date.now();
+const started=
+Date.now();
 
-while(Date.now()-started<timeout){
+while(
+Date.now()-started<
+timeout
+){
 
-if(await fileExists(path))
+if(
+await fileExists(path)
+)
 return true;
 
 await new Promise(
-resolve=>setTimeout(resolve,5000)
+resolve=>
+setTimeout(
+resolve,
+5000
+)
 );
 
 }
@@ -2115,27 +2861,43 @@ const s=songs[i];
 
 if(!s)return;
 
-document.getElementById("editIndex").value=i;
+document.getElementById(
+"editIndex"
+).value=i;
 
-document.getElementById("editTitle").value=
+document.getElementById(
+"editTitle"
+).value=
 s.title||"";
 
-document.getElementById("editUrl").value=
+document.getElementById(
+"editUrl"
+).value=
 s.url||"";
 
 document
-.getElementById("editModal")
+.getElementById(
+"editModal"
+)
 .classList
-.remove("hidden","closing");
+.remove(
+"hidden",
+"closing"
+);
 
 }
 
 
 function closeEdit(){
 
-const m=document.getElementById("editModal");
+const m=
+document.getElementById(
+"editModal"
+);
 
-if(m.classList.contains("hidden"))
+if(
+m.classList.contains("hidden")
+)
 return;
 
 m.classList.add("closing");
@@ -2154,42 +2916,60 @@ async function saveEdit(){
 
 const i=
 Number(
-document.getElementById("editIndex").value
+document.getElementById(
+"editIndex"
+).value
 );
 
 if(!songs[i])return;
 
 const title=
-document.getElementById("editTitle")
+document.getElementById(
+"editTitle"
+)
 .value
 .trim();
 
 const url=
-document.getElementById("editUrl")
+document.getElementById(
+"editUrl"
+)
 .value
 .trim();
 
 
 if(!title){
 
-toast("عنوان را وارد کنید","err");
+toast(
+"عنوان را وارد کنید",
+"err"
+);
+
 return;
 
 }
 
 if(!/^https?:\/\//i.test(url)){
 
-toast("لینک نامعتبر است","err");
+toast(
+"لینک نامعتبر است",
+"err"
+);
+
 return;
 
 }
 
 
-busy(true,"در حال ویرایش اطلاعات آهنگ...");
+busy(
+true,
+"در حال ویرایش اطلاعات آهنگ..."
+);
 
 try{
 
 songs[i].title=title;
+
 songs[i].url=url;
 
 
@@ -2199,9 +2979,10 @@ Update format according to the edited URL.
 
 songs[i].format=
 isMp3Url(url)
-?"mp3"
-:"source";
-
+?
+"mp3"
+:
+"source";
 
 await saveGist();
 
@@ -2216,7 +2997,10 @@ toast(
 
 }catch(e){
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }finally{
 
@@ -2231,7 +3015,8 @@ busy(false);
 
 async function del(i){
 
-const yes=await customConfirm(
+const yes=
+await customConfirm(
 
 "این آهنگ از فهرست Gist حذف شود؟\n\n"+
 "فایل موجود در مخزن حذف نخواهد شد.",
@@ -2247,7 +3032,10 @@ const old=songs[i];
 
 songs.splice(i,1);
 
-busy(true,"در حال حذف اطلاعات آهنگ...");
+busy(
+true,
+"در حال حذف اطلاعات آهنگ..."
+);
 
 try{
 
@@ -2262,11 +3050,18 @@ toast(
 
 }catch(e){
 
-songs.splice(i,0,old);
+songs.splice(
+i,
+0,
+old
+);
 
 render();
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }finally{
 
@@ -2282,9 +3077,21 @@ busy(false);
 function copy(i){
 
 navigator.clipboard
-.writeText(songs[i].url)
-.then(()=>toast("لینک کپی شد","ok"))
-.catch(e=>toast(e.message,"err"));
+.writeText(
+songs[i].url
+)
+.then(
+()=>toast(
+"لینک کپی شد",
+"ok"
+)
+)
+.catch(
+e=>toast(
+e.message,
+"err"
+)
+);
 
 }
 
@@ -2297,11 +3104,17 @@ try{
 
 await loadSongs();
 
-toast("فهرست تازه شد","ok");
+toast(
+"فهرست تازه شد",
+"ok"
+);
 
 }catch(e){
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }
 
@@ -2312,7 +3125,8 @@ toast(e.message,"err");
 
 async function logout(){
 
-const yes=await customConfirm(
+const yes=
+await customConfirm(
 
 "از HPanel Radio خارج شوید؟",
 
@@ -2322,8 +3136,13 @@ const yes=await customConfirm(
 
 if(!yes)return;
 
-localStorage.removeItem(AUTH);
-localStorage.removeItem(TK);
+localStorage.removeItem(
+AUTH
+);
+
+localStorage.removeItem(
+TK
+);
 
 location.href=
 "https://herculepanel.github.io/";
@@ -2348,11 +3167,14 @@ return;
 
 admin=!!a.admin;
 
-token=recoverRadioToken();
+token=
+recoverRadioToken();
 
 if(!token){
 
-document.getElementById("loading").innerHTML=`
+document.getElementById(
+"loading"
+).innerHTML=`
 
 <i class="bi bi-exclamation-triangle"></i>
 
@@ -2366,8 +3188,11 @@ document.getElementById("loading").innerHTML=`
 class="btn goldbtn"
 onclick="location.href='https://herculepanel.github.io/vault/'"
 >
+
 <i class="bi bi-safe2"></i>
+
 رفتن به Vault
+
 </button>
 
 `;
@@ -2376,8 +3201,14 @@ return;
 
 }
 
-document.getElementById("role").textContent=
-admin?"مدیر":"کاربر";
+document.getElementById(
+"role"
+).textContent=
+admin
+?
+"مدیر"
+:
+"کاربر";
 
 try{
 
@@ -2387,15 +3218,21 @@ await json(
 
 await loadSongs();
 
-document.getElementById("loading")
+document.getElementById(
+"loading"
+)
 .style.display="none";
 
-document.getElementById("app")
+document.getElementById(
+"app"
+)
 .style.display="block";
 
 }catch(e){
 
-document.getElementById("loading").innerHTML=`
+document.getElementById(
+"loading"
+).innerHTML=`
 
 <i class="bi bi-exclamation-triangle"></i>
 
@@ -2406,7 +3243,9 @@ document.getElementById("loading").innerHTML=`
 <br>
 
 <small>
+
 ${esc(e.message)}
+
 </small>
 
 `;
