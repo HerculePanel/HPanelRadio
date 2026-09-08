@@ -1,0 +1,83 @@
+name: Convert Audio To MP3
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Source audio file"
+        required: true
+        type: string
+
+      output:
+        description: "Output MP3 file"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+
+  convert:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Check input
+        run: |
+          echo "Source: ${{ inputs.source }}"
+          echo "Output: ${{ inputs.output }}"
+
+          if [ ! -f "${{ inputs.source }}" ]; then
+            echo "Source file does not exist."
+            exit 1
+          fi
+
+      - name: Convert to MP3
+        run: |
+          mkdir -p "$(dirname "${{ inputs.output }}")"
+
+          ffmpeg \
+            -y \
+            -i "${{ inputs.source }}" \
+            -vn \
+            -codec:a libmp3lame \
+            -b:a 192k \
+            -ar 44100 \
+            -ac 2 \
+            "${{ inputs.output }}"
+
+      - name: Remove source file
+        run: |
+          rm -f "${{ inputs.source }}"
+
+      - name: Verify MP3
+        run: |
+          if [ ! -s "${{ inputs.output }}" ]; then
+            echo "MP3 output is empty."
+            exit 1
+          fi
+
+          file "${{ inputs.output }}"
+
+      - name: Commit converted MP3
+        run: |
+          git config user.name "HPanel Radio"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          git commit -m "Convert audio to MP3" || echo "Nothing to commit"
+
+          git push
