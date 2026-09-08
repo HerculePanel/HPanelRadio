@@ -11,10 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-<!-- FFmpeg.wasm -->
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
-<script src="https://unpkg.com/@ffmpeg/util@0.11.1/dist/ffmpeg.min.js"></script>
-
 <style>
 :root{
 --bg:#0b0a09;
@@ -149,13 +145,7 @@ margin-inline-end:9px;
 background:linear-gradient(180deg,#ffd27a,#ff9d1f);
 color:#140f0a;
 font:14px Lalezar;
-cursor:pointer;
-transition:all .5s cubic-bezier(.22,1,.36,1)
-}
-
-input[type=file]::file-selector-button:hover{
-transform:translateY(-2px);
-box-shadow:0 7px 20px rgba(255,180,58,.22)
+cursor:pointer
 }
 
 label{
@@ -188,8 +178,7 @@ margin-top:4px
 
 audio{
 width:100%;
-margin-top:10px;
-border-radius:12px
+margin-top:10px
 }
 
 .footer{
@@ -252,8 +241,7 @@ backdrop-filter:blur(18px);
 display:flex;
 align-items:center;
 justify-content:center;
-z-index:10;
-opacity:1;
+z-index:100;
 animation:modalIn .55s cubic-bezier(.22,1,.36,1)
 }
 
@@ -335,11 +323,11 @@ background:linear-gradient(90deg,var(--gold),var(--mint));
 transition:width .3s ease
 }
 
-.converter-status{
-margin-top:9px;
-font-size:13px;
+.status{
+margin-top:8px;
+min-height:24px;
 color:var(--muted);
-min-height:20px
+line-height:1.7
 }
 
 .toast{
@@ -358,7 +346,7 @@ box-shadow:
 inset 0 1px 0 rgba(255,255,255,.08);
 opacity:0;
 animation:toastIn .55s cubic-bezier(.22,1,.36,1) forwards;
-z-index:200
+z-index:300
 }
 
 .toast.hide{
@@ -427,7 +415,7 @@ border:1px solid var(--line);
 border-radius:13px;
 background:rgba(20,15,10,.92);
 backdrop-filter:blur(10px);
-z-index:50;
+z-index:250;
 box-shadow:0 8px 30px #0008
 }
 
@@ -452,7 +440,7 @@ backdrop-filter:blur(18px);
 display:flex;
 align-items:center;
 justify-content:center;
-z-index:150;
+z-index:500;
 animation:dialogIn .35s cubic-bezier(.22,1,.36,1)
 }
 
@@ -625,8 +613,6 @@ margin-bottom:10px
 </div>
 
 
-<!-- Footer -->
-
 <footer class="footer">
 
 <div class="footer-title">
@@ -650,7 +636,7 @@ HerculePanel • Secure • Glassy • Lightweight
 </div>
 
 
-<!-- Add Song Modal -->
+<!-- Add Song -->
 
 <div id="modal" class="modal hidden">
 
@@ -662,20 +648,27 @@ HerculePanel • Secure • Glassy • Lightweight
 </h2>
 
 <label>عنوان</label>
-<input id="title" autocomplete="off">
+
+<input
+id="title"
+autocomplete="off"
+placeholder="مثلاً آهنگ من"
+>
 
 <label>فایل صوتی</label>
+
 <input
 id="file"
 type="file"
 accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.webm"
 >
 
-<div class="converter-status" id="converterStatus">
-فقط MP3 مستقیماً آپلود می‌شود؛ فایل‌های صوتی دیگر قبل از آپلود به MP3 تبدیل می‌شوند.
+<div id="fileInfo" class="status">
+فایل‌های غیر MP3 توسط GitHub Actions به MP3 تبدیل می‌شوند.
 </div>
 
 <label>یا لینک MP3</label>
+
 <input
 id="url"
 type="url"
@@ -686,12 +679,21 @@ placeholder="https://..."
 <div id="fill" class="fill"></div>
 </div>
 
-<button class="btn mint" onclick="saveSong()">
+<div id="convertStatus" class="status"></div>
+
+<button
+id="saveBtn"
+class="btn mint"
+onclick="saveSong()"
+>
 <i class="bi bi-check-lg"></i>
 ذخیره
 </button>
 
-<button class="btn ghost" onclick="closeAdd()">
+<button
+class="btn ghost"
+onclick="closeAdd()"
+>
 <i class="bi bi-x-lg"></i>
 لغو
 </button>
@@ -701,7 +703,7 @@ placeholder="https://..."
 </div>
 
 
-<!-- Custom Alert / Confirm -->
+<!-- Custom Dialog -->
 
 <div id="customDialog" class="custom-dialog hidden">
 
@@ -720,17 +722,14 @@ placeholder="https://..."
 
 <script>
 
-/* =========================================================
-   HPanel Radio Configuration
-========================================================= */
-
 const C={
 owner:"HerculePanel",
 repo:"HPanelRadio",
 branch:"main",
 gist:"eb1b8cd10486738c06ed9cc12677b7e2",
 file:"songs.json",
-folder:"songs"
+folder:"songs",
+workflow:"convert.yml"
 };
 
 const AUTH="hpanel_auth";
@@ -741,18 +740,17 @@ let token="";
 let admin=false;
 let songs=[];
 
-let ffmpeg=null;
-let ffmpegLoaded=false;
-
 
 /* =========================================================
-   Authentication
+   Auth
 ========================================================= */
 
 function getAuth(){
 
 try{
-return JSON.parse(localStorage.getItem(AUTH)||"null");
+return JSON.parse(
+localStorage.getItem(AUTH)||"null"
+);
 }catch{
 return null;
 }
@@ -760,21 +758,13 @@ return null;
 }
 
 
-/*
- * Matches the Vault structure exactly.
- *
- * First use hpanel_radio_token.
- * If it isn't there, recover the Radio token from
- * hpanel_vault_items, exactly like Vault saves it.
- */
-
 function recoverRadioToken(){
 
-let t=localStorage.getItem(TK)||"";
+let t=
+localStorage.getItem(TK)||"";
 
-if(t){
+if(t)
 return t;
-}
 
 try{
 
@@ -793,7 +783,10 @@ String(x.name||"")
 
 if(x?.token){
 
-localStorage.setItem(TK,x.token);
+localStorage.setItem(
+TK,
+x.token
+);
 
 return x.token;
 
@@ -807,12 +800,14 @@ return "";
 
 
 /* =========================================================
-   Busy
+   UI helpers
 ========================================================= */
 
 function busy(on,text="در حال انجام..."){
 
-document.getElementById("busyText").textContent=text;
+document
+.getElementById("busyText")
+.textContent=text;
 
 document
 .getElementById("busy")
@@ -821,10 +816,6 @@ document
 
 }
 
-
-/* =========================================================
-   Toast
-========================================================= */
 
 function toast(t,c=""){
 
@@ -849,12 +840,13 @@ x.remove();
 
 
 /* =========================================================
-   Custom Dialogs
+   Dialog
 ========================================================= */
 
 function closeCustomDialog(){
 
-const d=document.getElementById("customDialog");
+const d=
+document.getElementById("customDialog");
 
 if(d.classList.contains("hidden"))
 return;
@@ -891,7 +883,7 @@ error:"bi-exclamation-triangle",
 warning:"bi-exclamation-triangle"
 };
 
-const buttonClass=
+const cls=
 type==="error"||type==="warning"
 ?"rose"
 :"mint";
@@ -902,7 +894,7 @@ t.innerHTML=
 m.textContent=message;
 
 a.innerHTML=`
-<button class="btn ${buttonClass}" id="dialogOK">
+<button class="btn ${cls}" id="dialogOK">
 <i class="bi bi-check-lg"></i>
 باشه
 </button>
@@ -914,9 +906,7 @@ document.getElementById("dialogOK").onclick=()=>{
 
 closeCustomDialog();
 
-setTimeout(()=>{
-resolve();
-},300);
+setTimeout(resolve,300);
 
 };
 
@@ -958,25 +948,19 @@ a.innerHTML=`
 
 d.classList.remove("hidden","closing");
 
-
 document.getElementById("dialogYes").onclick=()=>{
 
 closeCustomDialog();
 
-setTimeout(()=>{
-resolve(true);
-},300);
+setTimeout(()=>resolve(true),300);
 
 };
-
 
 document.getElementById("dialogNo").onclick=()=>{
 
 closeCustomDialog();
 
-setTimeout(()=>{
-resolve(false);
-},300);
+setTimeout(()=>resolve(false),300);
 
 };
 
@@ -1013,12 +997,31 @@ async function json(path,opt={}){
 
 const r=await api(path,opt);
 
-const d=await r.json().catch(()=>null);
+const d=
+await r.json().catch(()=>null);
 
 if(!r.ok)
-throw Error(d?.message||"GitHub API "+r.status);
+throw Error(
+d?.message||"GitHub API "+r.status
+);
 
 return d;
+
+}
+
+
+/* =========================================================
+   Escape
+========================================================= */
+
+function esc(s){
+
+return String(s??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
@@ -1033,7 +1036,8 @@ busy(true,"در حال بارگذاری آهنگ‌ها...");
 
 try{
 
-const d=await json("/gists/"+C.gist);
+const d=
+await json("/gists/"+C.gist);
 
 const f=d.files?.[C.file];
 
@@ -1056,7 +1060,8 @@ busy(false);
 
 function render(){
 
-const box=document.getElementById("songs");
+const box=
+document.getElementById("songs");
 
 if(!songs.length){
 
@@ -1071,8 +1076,8 @@ return;
 
 }
 
-
-box.innerHTML=songs.map((s,i)=>`
+box.innerHTML=
+songs.map((s,i)=>`
 
 <div class="song">
 
@@ -1095,7 +1100,10 @@ src="${esc(s.url)}"
 
 <div>
 
-<button class="btn goldbtn" onclick="copy(${i})">
+<button
+class="btn goldbtn"
+onclick="copy(${i})"
+>
 <i class="bi bi-clipboard"></i>
 کپی لینک
 </button>
@@ -1110,7 +1118,10 @@ rel="noopener"
 باز کردن
 </a>
 
-<button class="btn rose" onclick="del(${i})">
+<button
+class="btn rose"
+onclick="del(${i})"
+>
 <i class="bi bi-trash3"></i>
 حذف
 </button>
@@ -1125,42 +1136,36 @@ rel="noopener"
 
 
 /* =========================================================
-   Escape HTML
-========================================================= */
-
-function esc(s){
-
-return String(s??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   Add Song Modal
+   Modal
 ========================================================= */
 
 function openAdd(){
 
-const m=document.getElementById("modal");
+const m=
+document.getElementById("modal");
 
-m.classList.remove("hidden","closing");
-
+document.getElementById("title").value="";
+document.getElementById("file").value="";
+document.getElementById("url").value="";
 document.getElementById("fill").style.width="0%";
 
-document.getElementById("converterStatus").textContent=
-"فقط MP3 مستقیماً آپلود می‌شود؛ فایل‌های صوتی دیگر قبل از آپلود به MP3 تبدیل می‌شوند.";
+document.getElementById("convertStatus").textContent="";
+
+document.getElementById("fileInfo").textContent=
+"فایل‌های غیر MP3 توسط GitHub Actions به MP3 تبدیل می‌شوند.";
+
+m.classList.remove(
+"hidden",
+"closing"
+);
 
 }
 
 
 function closeAdd(){
 
-const m=document.getElementById("modal");
+const m=
+document.getElementById("modal");
 
 if(m.classList.contains("hidden"))
 return;
@@ -1178,174 +1183,188 @@ m.classList.remove("closing");
 
 
 /* =========================================================
-   Public URL
+   Filename
 ========================================================= */
 
-function publicUrl(n){
-
-return `https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(n)}`;
-
-}
-
-
-/* =========================================================
-   Base64
-========================================================= */
-
-function b64(file){
-
-return new Promise((res,rej)=>{
-
-const r=new FileReader;
-
-r.onload=()=>{
-res(
-String(r.result).split(",")[1]
-);
-};
-
-r.onerror=rej;
-
-r.readAsDataURL(file);
-
-});
-
-}
-
-
-/* =========================================================
-   FFmpeg MP3 Converter
-========================================================= */
-
-async function loadFFmpeg(){
-
-if(ffmpegLoaded)
-return;
-
-const status=
-document.getElementById("converterStatus");
-
-status.textContent=
-"در حال آماده‌سازی مبدل MP3...";
-
-if(typeof FFmpeg==="undefined" ||
-!FFmpeg.createFFmpeg){
-
-throw Error(
-"مبدل MP3 بارگذاری نشد. اتصال اینترنت را بررسی کنید."
-);
-
-}
-
-ffmpeg=FFmpeg.createFFmpeg({
-log:false,
-corePath:
-"https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"
-});
-
-await ffmpeg.load();
-
-ffmpegLoaded=true;
-
-}
-
-
-function cleanFileName(name){
+function safeBaseName(name){
 
 return String(name||"audio")
 .replace(/\.[^/.]+$/,"")
 .replace(/[\\/:*?"<>|]/g,"_")
-.trim()||"audio";
+.replace(/\s+/g,"_")
+.trim()
+.slice(0,80)||"audio";
 
 }
 
 
-async function convertToMP3(file){
+function isMP3(file){
 
-const status=
-document.getElementById("converterStatus");
-
-status.textContent=
-"در حال تبدیل فایل به MP3...";
-
-document.getElementById("fill").style.width="10%";
-
-await loadFFmpeg();
-
-const inputName=
-"input_"+Date.now()+"."+(
-file.name.split(".").pop()||"audio"
-);
-
-const outputName=
-cleanFileName(file.name)+"_"+Date.now()+".mp3";
-
-ffmpeg.FS(
-"writeFile",
-inputName,
-await fetchFile(file)
-);
-
-document.getElementById("fill").style.width="30%";
-
-await ffmpeg.run(
-"-i",
-inputName,
-"-vn",
-"-codec:a",
-"libmp3lame",
-"-b:a",
-"192k",
-outputName
-);
-
-document.getElementById("fill").style.width="65%";
-
-const data=
-ffmpeg.FS(
-"readFile",
-outputName
-);
-
-try{
-ffmpeg.FS("unlink",inputName);
-}catch{}
-
-try{
-ffmpeg.FS("unlink",outputName);
-}catch{}
-
-status.textContent=
-"تبدیل به MP3 با موفقیت انجام شد.";
-
-return new File(
-[data.buffer],
-outputName,
-{
-type:"audio/mpeg",
-lastModified:Date.now()
-}
+return file &&
+(
+file.type==="audio/mpeg" ||
+/\.mp3$/i.test(file.name)
 );
 
 }
 
 
-/*
- * fetchFile helper required by FFmpeg.wasm 0.11
- */
+/* =========================================================
+   Upload
+========================================================= */
 
-async function fetchFile(file){
-
-if(file instanceof Uint8Array)
-return file;
-
-if(file instanceof ArrayBuffer)
-return new Uint8Array(file);
+async function uploadFile(file,path){
 
 const buffer=
 await file.arrayBuffer();
 
-return new Uint8Array(buffer);
+const bytes=
+new Uint8Array(buffer);
+
+let binary="";
+
+const chunk=0x8000;
+
+for(
+let i=0;
+i<bytes.length;
+i+=chunk
+){
+
+binary+=String.fromCharCode(
+...bytes.subarray(
+i,
+Math.min(i+chunk,bytes.length)
+)
+);
+
+}
+
+const content=
+btoa(binary);
+
+return json(
+"/repos/"+C.owner+"/"+C.repo+
+"/contents/"+
+encodeURIComponent(path)
+.replace(/%2F/g,"/"),
+{
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+message:
+"Upload audio for conversion",
+
+content,
+
+branch:C.branch
+
+})
+
+}
+);
+
+}
+
+
+/* =========================================================
+   Trigger GitHub Actions
+========================================================= */
+
+async function triggerConversion(source,output){
+
+return json(
+"/repos/"+C.owner+"/"+C.repo+
+"/actions/workflows/"+
+encodeURIComponent(C.workflow)+
+"/dispatches",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+ref:C.branch,
+
+inputs:{
+source,
+output
+}
+
+})
+
+}
+);
+
+}
+
+
+/* =========================================================
+   Check converted file
+========================================================= */
+
+async function convertedFileExists(path){
+
+const r=
+await api(
+"/repos/"+C.owner+"/"+C.repo+
+"/contents/"+
+encodeURIComponent(path)
+.replace(/%2F/g,"/")+
+"?ref="+encodeURIComponent(C.branch)
+);
+
+if(r.status===200)
+return true;
+
+if(r.status===404)
+return false;
+
+const d=
+await r.json().catch(()=>null);
+
+throw Error(
+d?.message||
+"خطا در بررسی فایل خروجی"
+);
+
+}
+
+
+/* =========================================================
+   Wait for conversion
+========================================================= */
+
+async function waitForConversion(
+path,
+timeout=8*60*1000
+){
+
+const start=Date.now();
+
+while(Date.now()-start<timeout){
+
+if(
+await convertedFileExists(path)
+){
+return true;
+}
+
+await new Promise(
+resolve=>setTimeout(resolve,5000)
+);
+
+}
+
+return false;
 
 }
 
@@ -1381,21 +1400,60 @@ return;
 
 if(!file&&!url){
 
-toast("فایل یا لینک را وارد کن","err");
+toast(
+"فایل یا لینک را وارد کن",
+"err"
+);
+
 return;
 
 }
 
 
-busy(true,"در حال ذخیره آهنگ...");
+const saveBtn=
+document.getElementById("saveBtn");
+
+saveBtn.disabled=true;
+
+busy(true,"در حال آماده‌سازی...");
 
 try{
 
-/* -----------------------------------------
-   File upload
------------------------------------------ */
+/* =========================================
+   Direct MP3 URL
+========================================= */
 
-if(file){
+if(!file){
+
+if(!/^https?:\/\//i.test(url))
+throw Error("لینک نامعتبر است");
+
+songs.push({
+title,
+url,
+size:0,
+added:new Date().toISOString()
+});
+
+await updateGist();
+
+render();
+
+closeAdd();
+
+toast(
+"آهنگ ذخیره شد",
+"ok"
+);
+
+return;
+
+}
+
+
+/* =========================================
+   File size
+========================================= */
 
 if(file.size>30*1024*1024){
 
@@ -1406,88 +1464,128 @@ throw Error(
 }
 
 
-/*
- * If the selected file isn't MP3,
- * automatically convert it.
- */
+/* =========================================
+   Generate unique names
+========================================= */
 
-const isMP3=
-file.type==="audio/mpeg" ||
-/\.mp3$/i.test(file.name);
+const id=
+Date.now()+"_"+Math.random()
+.toString(36)
+.slice(2,8);
 
-if(!isMP3){
+const base=
+safeBaseName(file.name);
 
-file=await convertToMP3(file);
+const source=
+C.folder+
+"/.convert_"+
+id+
+"_"+file.name
+.replace(/[\\/:*?"<>|]/g,"_");
 
-}else{
+const output=
+C.folder+
+"/"+
+base+
+"_"+id+
+".mp3";
 
-document.getElementById("converterStatus")
+
+/* =========================================
+   MP3 = direct upload
+========================================= */
+
+if(isMP3(file)){
+
+document.getElementById("convertStatus")
 .textContent=
-"فایل MP3 است و نیازی به تبدیل ندارد.";
+"فایل MP3 است؛ بدون تبدیل آپلود می‌شود.";
+
+document.getElementById("fill")
+.style.width="25%";
+
+await uploadFile(
+file,
+output
+);
+
+url=
+`https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(output.split("/").pop())}`;
+
+document.getElementById("fill")
+.style.width="80%";
 
 }
 
 
-const content=
-await b64(file);
+/* =========================================
+   Non-MP3 = GitHub Actions
+========================================= */
 
-const safeName=
-cleanFileName(file.name)+".mp3";
+else{
 
-const path=
-C.folder+"/"+safeName;
+document.getElementById("convertStatus")
+.textContent=
+"فایل غیر MP3 است؛ در حال ارسال به GitHub برای تبدیل...";
 
-document.getElementById("fill").style.width="72%";
+document.getElementById("fill")
+.style.width="15%";
 
 
-await json(
-"/repos/"+C.owner+"/"+C.repo+
-"/contents/"+
-encodeURIComponent(path)
-.replace(/%2F/g,"/"),
-{
-method:"PUT",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-message:
-"Add song "+safeName,
-
-content,
-
-branch:C.branch
-
-})
-
-}
+await uploadFile(
+file,
+source
 );
 
 
-url=publicUrl(safeName);
+document.getElementById("fill")
+.style.width="30%";
 
-document.getElementById("fill").style.width="88%";
+document.getElementById("convertStatus")
+.textContent=
+"مبدل GitHub Actions شروع شد؛ لطفاً صبر کنید...";
+
+
+await triggerConversion(
+source,
+output
+);
+
+
+document.getElementById("fill")
+.style.width="40%";
+
+
+const success=
+await waitForConversion(output);
+
+
+if(!success){
+
+throw Error(
+"زمان تبدیل تمام شد. GitHub Actions هنوز فایل MP3 را آماده نکرده است."
+);
 
 }
 
 
-/* -----------------------------------------
-   URL validation
------------------------------------------ */
+document.getElementById("fill")
+.style.width="85%";
 
-if(!/^https?:\/\//i.test(url)){
 
-throw Error("لینک نامعتبر است");
+url=
+`https://${C.owner}.github.io/${C.repo}/${C.folder}/${encodeURIComponent(output.split("/").pop())}`;
+
+document.getElementById("convertStatus")
+.textContent=
+"تبدیل با موفقیت انجام شد.";
 
 }
 
 
-/* -----------------------------------------
-   Save Gist metadata
------------------------------------------ */
+/* =========================================
+   Update Gist
+========================================= */
 
 songs.push({
 
@@ -1495,12 +1593,52 @@ title,
 
 url,
 
-size:file?.size||0,
+size:file.size,
 
 added:new Date().toISOString()
 
 });
 
+await updateGist();
+
+document.getElementById("fill")
+.style.width="100%";
+
+render();
+
+closeAdd();
+
+toast(
+"آهنگ با موفقیت ذخیره شد",
+"ok"
+);
+
+
+}catch(e){
+
+console.error(e);
+
+toast(
+e?.message||"خطایی رخ داد",
+"err"
+);
+
+}finally{
+
+busy(false);
+
+saveBtn.disabled=false;
+
+}
+
+}
+
+
+/* =========================================================
+   Gist
+========================================================= */
+
+async function updateGist(){
 
 await json(
 "/gists/"+C.gist,
@@ -1532,31 +1670,6 @@ null,
 
 }
 );
-
-
-document.getElementById("fill").style.width="100%";
-
-render();
-
-closeAdd();
-
-toast("آهنگ ذخیره شد","ok");
-
-
-}catch(e){
-
-console.error(e);
-
-toast(
-e?.message||"خطایی رخ داد",
-"err"
-);
-
-}finally{
-
-busy(false);
-
-}
 
 }
 
@@ -1576,52 +1689,22 @@ await customConfirm(
 if(!yes)
 return;
 
-
 const oldSongs=[...songs];
 
 songs.splice(i,1);
 
 busy(true,"در حال حذف آهنگ...");
 
-
 try{
 
-await json(
-"/gists/"+C.gist,
-{
-method:"PATCH",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-files:{
-
-[C.file]:{
-
-content:
-JSON.stringify(
-{songs},
-null,
-2
-)
-
-}
-
-}
-
-})
-
-}
-);
-
+await updateGist();
 
 render();
 
-toast("حذف شد","ok");
-
+toast(
+"حذف شد",
+"ok"
+);
 
 }catch(e){
 
@@ -1629,7 +1712,10 @@ songs=oldSongs;
 
 render();
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }finally{
 
@@ -1648,8 +1734,18 @@ function copy(i){
 
 navigator.clipboard
 .writeText(songs[i].url)
-.then(()=>toast("لینک کپی شد","ok"))
-.catch(e=>toast(e.message,"err"));
+.then(()=>{
+toast(
+"لینک کپی شد",
+"ok"
+);
+})
+.catch(e=>{
+toast(
+e.message,
+"err"
+);
+});
 
 }
 
@@ -1664,11 +1760,17 @@ try{
 
 await loadSongs();
 
-toast("فهرست تازه شد","ok");
+toast(
+"فهرست تازه شد",
+"ok"
+);
 
 }catch(e){
 
-toast(e.message,"err");
+toast(
+e.message,
+"err"
+);
 
 }
 
@@ -1690,11 +1792,6 @@ await customConfirm(
 if(!yes)
 return;
 
-
-/*
- * Keep this compatible with the shared HPanel system.
- */
-
 localStorage.removeItem(AUTH);
 localStorage.removeItem(TK);
 
@@ -1705,7 +1802,7 @@ location.href=
 
 
 /* =========================================================
-   Missing Token Screen
+   Missing token
 ========================================================= */
 
 function showTokenError(){
@@ -1723,11 +1820,7 @@ loading.innerHTML=`
 <div style="color:var(--muted);line-height:1.8">
 اطلاعات ورود معتبر است، اما توکن HPanel Radio
 در حافظه مرورگر پیدا نشد.
-<br>
-به Vault بروید و دوباره اطلاعات را بارگذاری کنید.
 </div>
-
-<div style="margin-top:12px">
 
 <a
 class="btn home"
@@ -1736,8 +1829,6 @@ href="https://herculepanel.github.io/vault/"
 <i class="bi bi-safe2"></i>
 باز کردن Vault
 </a>
-
-</div>
 
 `;
 
@@ -1752,17 +1843,6 @@ href="https://herculepanel.github.io/vault/"
 
 const a=getAuth();
 
-
-/*
- * EXACT Vault authentication format:
- *
- * {
- *   loggedIn:true,
- *   admin:true/false,
- *   at:Date.now()
- * }
- */
-
 if(!a?.loggedIn){
 
 location.href=
@@ -1772,23 +1852,9 @@ return;
 
 }
 
-
 admin=!!a.admin;
 
-
-/*
- * Recover token from hpanel_radio_token
- * or hpanel_vault_items.
- */
-
 token=recoverRadioToken();
-
-
-/*
- * IMPORTANT:
- * Don't redirect when the token is missing.
- * This prevents the Radio ↔ Vault redirect loop.
- */
 
 if(!token){
 
@@ -1798,10 +1864,9 @@ return;
 
 }
 
-
-document.getElementById("role").textContent=
+document.getElementById("role")
+.textContent=
 admin?"مدیر":"کاربر";
-
 
 try{
 
@@ -1812,13 +1877,10 @@ await json(
 await loadSongs();
 
 document.getElementById("loading")
-.style
-.display="none";
+.style.display="none";
 
 document.getElementById("app")
-.style
-.display="block";
-
+.style.display="block";
 
 }catch(e){
 
@@ -1853,4 +1915,4 @@ onclick="location.reload()"
 </script>
 
 </body>
-      </html>
+   </html>
